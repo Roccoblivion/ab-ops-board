@@ -15,6 +15,8 @@ h1{font-size:20px;margin:0}.mut{color:var(--mut);font-size:12px}
 .card h2{font-size:14px;margin:0 0 10px;color:var(--p);letter-spacing:.02em}
 .f{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
 .f label{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.f label.ck{text-transform:none;letter-spacing:0;font-size:12px;color:var(--fg);display:flex;align-items:center;gap:7px;cursor:pointer}
+.f label.ck input{width:auto;margin:0}
 .f input,.f select,.f textarea{font:inherit;font-size:13.5px;background:#1a1727;color:var(--ink);
   border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%;resize:vertical}
 .f textarea{min-height:64px;line-height:1.45}
@@ -308,6 +310,7 @@ Carpet cleaning and any repairs are quoted separately once the areas read dry.</
         <option value="ab">Above &amp; Beyond standard</option>
         <option value="neal">Neal Communities 2026</option>
         <option value="county">Manatee County</option></select></div>
+      <div class="f"><label class="ck"><input type="checkbox" id="w_emg"> Emergency call-out labour rate (Manatee County only)</label></div>
       <div class="g2">
         <div class="f"><label>Extraction sq ft</label><input id="w_sf" type="number" min="0" step="10" value="300"></div>
         <div class="f"><label>Days on the job</label><input id="w_days" type="number" min="1" step="1" value="4"></div>
@@ -318,9 +321,10 @@ Carpet cleaning and any repairs are quoted separately once the areas read dry.</
         <div class="f"><label>Technicians</label><input id="w_t" type="number" min="1" step="1" value="2"></div>
         <div class="f"><label>Labour hours each</label><input id="w_h" type="number" min="0" step="0.5" value="5"></div>
       </div>
-      <div class="mut" style="font-size:11.5px">Equipment is billed through the day of pickup, supported by the readings. Neal will not pay service calls, trip charges or travel time.</div>
+      <div class="mut" style="font-size:11.5px">Equipment is billed through the day of pickup, supported by the readings. Neal will not pay service calls, trip charges or travel time.</div><div class="mut" id="w_ratenote" style="font-size:11.5px;margin-top:6px"></div>
     </div>
 
+  </div>
   </div>
 
   <div class="prevwrap"><div class="rpt" id="rpt"></div></div>
@@ -517,7 +521,11 @@ function renderWater(){
   pages.push('<div class="page">'+headW()+'<div class="baband">PHOTO DOCUMENTATION</div><div class="grid">'+cells+'</div></div>');
  }
 
- var c=WR[$("w_card").value]||WR.ab, L=[], tot=0;
+ var ck=$("w_card").value, c=WR[ck]||WR.ab, L=[], tot=0;
+ var lab=(ck==="county"&&$("w_emg")&&$("w_emg").checked)?80.50:c.l;
+ var rn={ab:"", neal:"Neal: the $86.00 technician rate is from the Neal price list. Equipment day rates, setup and monitoring are not on that list here \u2014 Above &amp; Beyond rates are applied. Confirm before this goes out.",
+   county:"Manatee County: hourly, dehumidifier and air mover rates are the county rates. Scrubber, setup, monitoring and extraction use Above &amp; Beyond rates."};
+ if($("w_ratenote")) $("w_ratenote").innerHTML=rn[ck]||"";
  var sf=N("w_sf"), dy=Math.max(1,Math.round(N("w_days")||1));
  var de=Math.round(N("w_de")), am=Math.round(N("w_am")), scb=Math.round(N("w_sc"));
  var wt=Math.max(1,Math.round(N("w_t")||1)), wh=N("w_h"), th=wt*wh, mv=Math.round(N("w_mon"));
@@ -526,7 +534,7 @@ function renderWater(){
  if(de>0) add("Dehumidifiers - "+de+" unit"+(de===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"), de*dy*c.de);
  if(am>0) add("Air movers - "+am+" unit"+(am===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"), am*dy*c.am);
  if(scb>0) add("HEPA air scrubbers - "+scb+" unit"+(scb===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"), scb*dy*c.sc);
- if(th>0) add("Mitigation labour - extraction, equipment placement and manipulation - "+wt+" technician"+(wt===1?"":"s")+", "+wh+" hour"+(wh===1?"":"s")+" each ("+th+" technician hours)", th*c.l);
+ if(th>0) add("Mitigation labour - extraction, equipment placement and manipulation - "+wt+" technician"+(wt===1?"":"s")+", "+wh+" hour"+(wh===1?"":"s")+" each ("+th+" technician hours)", th*lab);
  add("Equipment setup, adjustment and removal", c.su);
  if(mv>0) add("Moisture monitoring - "+mv+" visit"+(mv===1?"":"s")+" during the dry-down", mv*c.mo);
  add("Antimicrobial and consumables allowance", 75);
