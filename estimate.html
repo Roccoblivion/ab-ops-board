@@ -1,0 +1,177 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estimate Builder - A&B</title><style>
+:root{--bg:#14121f;--card:#221f33;--line:#35304d;--ink:#eee;--mut:#8b849e;--t:#7fd4d9;--p:#b9a6e0;--ok:#7fcfa3;--warn:#f6c453;--stop:#ff7b72}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,Arial,sans-serif}
+a{color:var(--t)}.wrap{max-width:1100px;margin:0 auto;padding:14px 14px 60px}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+h1{font-size:20px;margin:0}.mut{color:var(--mut);font-size:12px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:860px){.cols{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+h2{font-size:15px;margin:0 0 10px;color:var(--p)}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:12px}
+.seg button{flex:1;border:0;border-right:1px solid var(--line);background:transparent;color:var(--mut);font:inherit;font-size:13px;padding:9px 4px;cursor:pointer}
+.seg button:last-child{border-right:0}.seg button[aria-pressed=true]{background:var(--p);color:#1b1728;font-weight:600}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:560px){.g2,.g3{grid-template-columns:1fr}}
+.f{display:flex;flex-direction:column;gap:4px;min-width:0}
+label{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+input,select{font:inherit;font-size:14px;background:#1a1727;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%}
+input:focus,select:focus{outline:2px solid var(--t);border-color:var(--t)}
+.tier{display:flex;gap:9px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px;cursor:pointer}
+.tier b{font-size:13px;display:block}.tier em{font-style:normal;font-size:11px;color:var(--mut);display:block}
+.tier .a{margin-left:auto;color:var(--p);font-weight:600;white-space:nowrap}
+.ck{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-top:8px;cursor:pointer}
+.ck small{display:block;color:var(--mut);font-size:11px}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:#2e2947;color:#cfc7e6;text-align:left;padding:6px 9px}
+th:last-child{text-align:right}
+td{font-size:12.5px;padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+td:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.tot td{background:#2b2743;font-weight:700;font-size:14px;color:var(--p);border-bottom:0}
+.big{display:flex;justify-content:space-between;align-items:baseline;background:#2e2947;border-radius:9px;padding:12px 14px;margin-top:12px}
+.big .l{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.big .v{font-size:24px;font-weight:700;color:var(--t);font-variant-numeric:tabular-nums}
+.n{font-size:12px;line-height:1.45;padding:7px 10px;border-left:3px solid var(--mut);background:#1a1727;border-radius:5px;margin-top:6px;color:#cfc9db}
+.n.stop{border-left-color:var(--stop)}.n.warn{border-left-color:var(--warn)}
+.n b{color:#fff}
+.acts{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
+.acts button{font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:7px;border:1px solid var(--p);background:var(--p);color:#1b1728;cursor:pointer}
+#toast{font-size:12px;color:var(--ok)}
+</style></head><body><div class="wrap">
+<div class="top"><div><h1>Estimate Builder</h1>
+<div class="mut">Rates effective 1 September 2026. Description and amount only, the way it goes on a client document.</div></div>
+<div class="mut"><a href="/">&larr; Ops board</a></div></div>
+<div class="cols"><div>
+<div class="card"><h2>The job</h2><div class="g2">
+<div class="f"><label>Job name or address</label><input id="jobname" placeholder="3067 Porto Lane-26-0271-STC"></div>
+<div class="f"><label>Client</label><select id="client"><option>Taylor Morrison</option><option>Neal Communities</option><option>RT Moore</option><option>Marquis Homes</option><option>Manatee County</option><option>Homeowner</option><option>Other builder</option></select></div>
+<div class="f"><label>Rate card</label><select id="ratecard"><option value="ab">Above &amp; Beyond standard</option><option value="neal">Neal Communities 2026</option><option value="county">Manatee County</option></select></div>
+<div class="f"><label>Prepared by</label><input id="preparedby" placeholder="Your name"></div>
+</div></div>
+<div class="card"><h2>Type of work</h2>
+<div class="seg"><button type="button" data-k="stc" aria-pressed="true">Truss cleaning</button><button type="button" data-k="mld" aria-pressed="false">Mold treatment</button><button type="button" data-k="wtr" aria-pressed="false">Water mitigation</button></div>
+<div id="p-stc">
+<label class="tier"><input type="radio" name="tier" value="350"><span><b>Spot</b><em>Up to 3 isolated spots, about 10 sq ft or less. About an hour on site.</em></span><span class="a">$350</span></label>
+<label class="tier"><input type="radio" name="tier" value="650"><span><b>Section</b><em>One area, or 4 to 10 scattered spots. Two to three hours.</em></span><span class="a">$650</span></label>
+<label class="tier"><input type="radio" name="tier" value="950" checked><span><b>Multi-area</b><em>More than one area, up to about half the trusses. Three to four hours.</em></span><span class="a">$950</span></label>
+<label class="tier"><input type="radio" name="tier" value="1200"><span><b>Full structure</b><em>All or nearly all trusses, whole attic. Four to six hours.</em></span><span class="a">$1,200</span></label>
+<label class="tier"><input type="radio" name="tier" value="1550"><span><b>Oversized</b><em>Over roughly 3,000 sq ft under roof, or more than one attic system.</em></span><span class="a">$1,550</span></label>
+<label class="ck"><input type="checkbox" id="s_after"><span>After-hours or weekend <small>Adds $100</small></span></label>
+<label class="ck"><input type="checkbox" id="s_fog"><span>Whole-attic antimicrobial fog <small>Adds $150 on Spot, Section and Multi-area only</small></span></label>
+<label class="ck"><input type="checkbox" id="s_re"><span>Return re-clean <small>Flat $350, replaces the tier price</small></span></label>
+</div>
+<div id="p-mld" hidden><div class="g3">
+<div class="f"><label>Technicians</label><input id="m_t" type="number" min="1" step="1" value="2"></div>
+<div class="f"><label>Hours on site</label><input id="m_h" type="number" min="0" step="0.25" value="3"></div>
+<div class="f"><label>Scrubber days</label><input id="m_s" type="number" min="0" step="1" value="1"></div></div>
+<label class="ck"><input type="checkbox" id="m_demo" checked><span>Material was removed <small>Adds disposal $220 and decontamination $26.25</small></span></label>
+<label class="ck"><input type="checkbox" id="m_c" checked><span>Antimicrobial, sheeting, PPE and consumables <small>$75</small></span></label>
+<label class="ck"><input type="checkbox" id="m_r"><span>Quote the repair separately <small>$950 minimum construction charge, shown as an option</small></span></label>
+</div>
+<div id="p-wtr" hidden><div class="g3">
+<div class="f"><label>Extraction sq ft</label><input id="w_sf" type="number" min="0" step="10" value="300"></div>
+<div class="f"><label>Days on the job</label><input id="w_d" type="number" min="1" step="1" value="4"></div>
+<div class="f"><label>Monitoring visits</label><input id="w_m" type="number" min="0" step="1" value="3"></div>
+<div class="f"><label>Dehumidifiers</label><input id="w_de" type="number" min="0" step="1" value="4"></div>
+<div class="f"><label>Air movers</label><input id="w_am" type="number" min="0" step="1" value="12"></div>
+<div class="f"><label>HEPA scrubbers</label><input id="w_sc" type="number" min="0" step="1" value="1"></div>
+<div class="f"><label>Technicians</label><input id="w_t" type="number" min="1" step="1" value="2"></div>
+<div class="f"><label>Labour hours each</label><input id="w_h" type="number" min="0" step="0.5" value="5"></div>
+<div class="f"><label>Response</label><select id="w_e"><option value="0">Non-emergency</option><option value="1">Emergency</option></select></div></div>
+<label class="ck"><input type="checkbox" id="w_su" checked><span>Equipment setup, adjustment and removal <small>$275.63 once</small></span></label>
+<label class="ck"><input type="checkbox" id="w_g"><span>Germicidal application <small>Manatee County card only, $0.15/sf</small></span></label>
+<label class="ck"><input type="checkbox" id="w_c" checked><span>Antimicrobial and consumables <small>$75</small></span></label>
+</div></div></div>
+<div><div class="card"><h2>Estimate <span class="mut" id="cardname" style="float:right;font-weight:400"></span></h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Description</th><th>Amount</th></tr></thead><tbody id="lines"></tbody></table></div>
+<div class="big"><span class="l">Total</span><span class="v" id="total">$0.00</span></div>
+<div id="notes"></div>
+<div class="acts"><button type="button" id="copy">Copy estimate</button><span id="toast"></span></div>
+</div></div></div></div>
+<script>
+(function(){
+var R={ab:{n:"Above & Beyond standard",l:94.50,de:174.58,am:46.08,sc:94.66,su:275.63,mo:99.75,ex:0.34,ge:0,dc:26.25},
+neal:{n:"Neal Communities 2026",l:86.00,de:174.58,am:46.08,sc:94.66,su:275.63,mo:99.75,ex:0.34,ge:0,dc:26.25},
+county:{n:"Manatee County",l:57.50,le:80.50,de:86.25,am:31.62,sc:94.66,su:275.63,mo:99.75,ex:0.34,ge:0.15,dc:26.25}};
+var CONS=75,DISP=220,REPAIR=950,kind="stc";
+function $(i){return document.getElementById(i)}
+function M(n){return "$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function V(i){var v=parseFloat($(i).value);return isFinite(v)&&v>0?v:0}
+Array.prototype.forEach.call(document.querySelectorAll(".seg button"),function(b){
+ b.addEventListener("click",function(){kind=b.getAttribute("data-k");
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button"),function(x){x.setAttribute("aria-pressed",String(x===b))});
+  ["stc","mld","wtr"].forEach(function(k){$("p-"+k).hidden=(k!==kind)});draw();});});
+function build(){
+ var c=R[$("ratecard").value]||R.ab,cl=$("client").value,L=[],N=[],rep=0;
+ if(kind==="stc"){
+  if($("s_re").checked){L.push(["Return re-clean of previously treated truss and framing surfaces, single visit; photographic documentation and completion report included",350]);}
+  else{var t=parseFloat(document.querySelector("input[name=tier]:checked").value);
+   L.push(["Truss treatment - cleaning and antimicrobial application to affected truss and framing surfaces, single visit; photographic documentation and completion report included",t]);
+   if($("s_fog").checked&&t<=950)L.push(["Whole-attic antimicrobial fog",150]);}
+  if($("s_after").checked)L.push(["After-hours response",100]);
+  N.push(["","Tier is set by <b>extent, not hours</b>. In doubt between two tiers, quote the higher and say why."]);
+  N.push(["","Do not print the tier name on the client document."]);}
+ if(kind==="mld"){
+  var mt=Math.max(1,Math.round(V("m_t")||1)),mh=V("m_h"),th=mt*mh;
+  if(th>0)L.push(["Mold treatment labour - scoping, protection, removal and bagging of affected material, HEPA vacuuming, antimicrobial application, cleanup - "+mt+" technician"+(mt===1?"":"s")+", "+mh+" hour"+(mh===1?"":"s")+" on site ("+th+" technician hours)",th*c.l]);
+  var sd=V("m_s");if(sd>0)L.push(["HEPA air scrubber - one unit, "+sd+" day"+(sd===1?"":"s"),sd*c.sc]);
+  if($("m_demo").checked){L.push(["Disposal of removed material and contaminated protection",DISP]);L.push(["Equipment decontamination following mold work",c.dc]);}
+  if($("m_c").checked)L.push(["Antimicrobial, plastic sheeting, PPE and consumables",CONS]);
+  if($("m_r").checked)rep=REPAIR;
+  N.push(["stop","<b>No monitoring-visit line on a mold job.</b> Monitoring is a water item only."]);
+  N.push(["stop","Never state an area is mold-free because no visible growth was seen."]);
+  N.push(["warn","Growth over <b>ten square feet contiguous</b>: stop, photograph, confirm handling before continuing (FS 468.8411)."]);}
+ if(kind==="wtr"){
+  var sf=V("w_sf"),dy=Math.max(1,Math.round(V("w_d")||1)),em=$("w_e").value==="1",lr=(c.le&&em)?c.le:c.l;
+  if(sf>0)L.push(["Water extraction - approximately "+sf+" square feet",sf*c.ex]);
+  if($("w_g").checked&&c.ge>0&&sf>0)L.push(["Germicidal application - approximately "+sf+" square feet",sf*c.ge]);
+  var d=Math.round(V("w_de")),a=Math.round(V("w_am")),s=Math.round(V("w_sc"));
+  if(d>0)L.push(["Dehumidifiers - "+d+" unit"+(d===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"),d*dy*c.de]);
+  if(a>0)L.push(["Air movers - "+a+" unit"+(a===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"),a*dy*c.am]);
+  if(s>0)L.push(["HEPA air scrubbers - "+s+" unit"+(s===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"),s*dy*c.sc]);
+  var wt=Math.max(1,Math.round(V("w_t")||1)),wh=V("w_h"),wth=wt*wh;
+  if(wth>0)L.push(["Mitigation labour - extraction, equipment placement and manipulation - "+wt+" technician"+(wt===1?"":"s")+", "+wh+" hour"+(wh===1?"":"s")+" each ("+wth+" technician hours)",wth*lr]);
+  if($("w_su").checked)L.push(["Equipment setup, adjustment and removal",c.su]);
+  var mv=Math.round(V("w_m"));if(mv>0)L.push(["Moisture monitoring - "+mv+" visit"+(mv===1?"":"s")+" during the dry-down",mv*c.mo]);
+  if($("w_c").checked)L.push(["Antimicrobial and consumables allowance",CONS]);
+  N.push(["","Equipment is billed <b>through the day of pickup</b>, supported by the recorded readings. Dries in three days, bill three."]);
+  if(em&&!c.le)N.push(["warn","This rate card has no separate emergency labour rate - only Manatee County does."]);}
+ if($("ratecard").value==="neal"||cl==="Neal Communities"){
+  N.push(["stop","Neal will <b>not</b> pay service calls, trip charges or travel time. Bill the work instead."]);
+  N.push(["stop","Neal hires its own mold assessor - never add an assessment line."]);
+  N.push(["warn","The Neal 2026 card is still marked PROPOSED. Check anything unusual with Jacob."]);}
+ if(cl==="Taylor Morrison")N.push(["stop","Do <b>not</b> show the 2% prompt-payment discount on any Taylor Morrison document. Submit gross."]);
+ if(rep)N.push(["","Repair is quoted as a <b>separate option</b> at the $950 minimum construction charge, not a line in this total."]);
+ N.push(["","Labour hours are always <b>to be confirmed against technician timesheets</b>."]);
+ N.push(["","Confirm crew size from the <b>Albi scheduler event attendees</b> before pricing labour."]);
+ N.push(["","Description and amount only. No quantity column, no unit rates on a client document."]);
+ var tot=0;L.forEach(function(x){tot+=x[1]});
+ if(tot>2500)N.unshift(["warn","Over <b>$2,500</b> - this waits for Jacob before it goes to the client."]);
+ return {L:L,tot:tot,N:N,rep:rep,c:c};}
+var last=null;
+function draw(){var e=build();last=e;$("cardname").textContent=e.c.n;
+ var tb=$("lines");tb.innerHTML="";
+ e.L.forEach(function(l){var tr=document.createElement("tr");var a=document.createElement("td");a.textContent=l[0];
+  var b=document.createElement("td");b.textContent=M(l[1]);tr.appendChild(a);tr.appendChild(b);tb.appendChild(tr);});
+ if(e.L.length){var tr=document.createElement("tr");tr.className="tot";var a=document.createElement("td");a.textContent="TOTAL";
+  var b=document.createElement("td");b.textContent=M(e.tot);tr.appendChild(a);tr.appendChild(b);tb.appendChild(tr);}
+ $("total").textContent=M(e.tot);
+ var nb=$("notes");nb.innerHTML="";
+ e.N.forEach(function(n){var d=document.createElement("div");d.className="n"+(n[0]?" "+n[0]:"");d.innerHTML=n[1];nb.appendChild(d);});}
+document.addEventListener("input",draw);document.addEventListener("change",draw);draw();
+$("copy").addEventListener("click",function(){
+ var e=last,o=[];o.push((($("jobname").value||"").trim()||"[job name]")+"  -  "+$("client").value);
+ o.push("Priced to the "+e.c.n+" rate card, "+new Date().toLocaleDateString("en-US")+".");
+ if(($("preparedby").value||"").trim())o.push("Prepared by "+$("preparedby").value.trim()+".");
+ o.push("");e.L.forEach(function(l){o.push(l[0]+"    "+M(l[1]))});o.push("TOTAL    "+M(e.tot));
+ if(e.rep){o.push("");o.push("REPAIR OPTION (not included above): "+M(e.rep)+", Above & Beyond minimum construction charge.");}
+ o.push("");o.push("Labour hours to be confirmed against technician timesheets.");
+ var txt=o.join("\n");
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){
+  $("toast").textContent="Copied - paste into the report template.";setTimeout(function(){$("toast").textContent=""},3000);},
+  function(){$("toast").textContent="Could not copy.";});}
+ else{$("toast").textContent="Could not copy.";}});
+})();
+</script></body></html>
