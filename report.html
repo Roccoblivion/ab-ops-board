@@ -36,6 +36,10 @@ h1{font-size:20px;margin:0}.mut{color:var(--mut);font-size:12px}
 .th .x{float:right;font-size:10px;color:var(--mut);cursor:pointer;padding:0 2px}
 .prevwrap{background:#0e0c16;border-radius:10px;padding:14px;overflow:auto}
 .prevwrap .rpt{transform-origin:top left;background:#fff}
+.seg2{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg2 .sb{border:0;border-right:1px solid var(--line);background:transparent;color:var(--mut);font:inherit;font-size:12.5px;padding:8px 13px;cursor:pointer}
+.seg2 .sb:last-child{border-right:0}
+.seg2 .sb[aria-pressed=true]{background:var(--p);color:#1b1728;font-weight:600}
 .hintbox{font-size:12px;color:var(--mut);background:#1a1727;border-left:3px solid var(--warn);
   border-radius:5px;padding:8px 10px;margin-bottom:12px;line-height:1.45}
 
@@ -155,7 +159,7 @@ h1{font-size:20px;margin:0}.mut{color:var(--mut);font-size:12px}
 
 <div class="top noprint">
   <div><h1>Report Builder</h1>
-  <div class="mut">Truss cleaning report. Fill the left, check the preview, then Save as PDF. Output is identical to the reports we issue.</div></div>
+  <div class="mut">Pick the report type, fill the left, check the preview, then Save as PDF. Output is identical to the reports we issue.</div></div>
   <div class="mut"><a href="/">&larr; Ops board</a> &nbsp;·&nbsp; <a href="/estimate">Estimate builder</a></div>
 </div>
 
@@ -163,11 +167,13 @@ h1{font-size:20px;margin:0}.mut{color:var(--mut);font-size:12px}
   <button class="btn" id="print">Save as PDF</button>
   <button class="btn ghost" id="addphotos">Add photos</button>
   <input type="file" id="files" accept="image/*" multiple hidden>
+  <span class="seg2" role="group" aria-label="Report type"><button type="button" class="sb" data-m="stc" aria-pressed="true">Truss cleaning</button><button type="button" class="sb" data-m="wtr" aria-pressed="false">Water mitigation</button></span>
   <span class="mut" id="status">Ctrl+P also works. Choose "Save as PDF", margins None, and tick Background graphics.</span>
 </div>
 
 <div class="shell">
   <div class="noprint">
+  <div id="form-stc">
     <div class="hintbox">Write what actually happened. If the note says sprayed, write treated — not cleaned. Never enter a reading, an hour count or a date you do not have.</div>
 
     <div class="card"><h2>Job</h2>
@@ -229,6 +235,94 @@ Proceed with drywall installation only when framing moisture content meets the b
       <div class="mut" style="font-size:11.5px">Tiers: Spot $350 · Section $650 · Multi-area $950 · Full $1,200 · Oversized $1,550. Set by extent, not hours. Never print the tier name here.</div>
     </div>
   </div>
+  </div>
+
+  <div id="form-wtr" hidden>
+    <div class="hintbox">Never write a moisture reading, a date or an hour count you do not have. If the category of water has not been established, say <b>to be confirmed</b> — do not guess it.</div>
+
+    <div class="card"><h2>Loss</h2>
+      <div class="f"><label>Property address</label><input id="w_addr" value="14929 South Tamiami Trail"></div>
+      <div class="g2">
+        <div class="f"><label>City, state, zip</label><input id="w_city" value="North Port, FL 34287"></div>
+        <div class="f"><label>Job number</label><input id="w_job" value="26-0279-ESR"></div>
+        <div class="f"><label>Date of loss</label><input id="w_dol" value="September 3, 2026"></div>
+        <div class="f"><label>Response date</label><input id="w_resp" value="September 3, 2026"></div>
+        <div class="f"><label>Report date</label><input id="w_drep" value="September 4, 2026"></div>
+        <div class="f"><label>Prepared for</label><input id="w_client" value="Property management"></div>
+      </div>
+      <div class="f"><label>Client contact</label><input id="w_contact" value=""></div>
+      <div class="f"><label>Field personnel</label><input id="w_crew" value="">
+        <span class="tip">From the Albi scheduler event attendees.</span></div>
+      <div class="f"><label>Cause of loss</label><input id="w_cause" value="Fire sprinkler discharge">
+        <span class="tip">Only what you know. Otherwise: under investigation.</span></div>
+      <div class="g2">
+        <div class="f"><label>Category of water</label><select id="w_cat">
+          <option>Category 1</option><option>Category 2</option><option>Category 3</option>
+          <option selected>To be confirmed</option></select></div>
+        <div class="f"><label>Class of loss</label><select id="w_cls">
+          <option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option>
+          <option selected>To be confirmed</option></select></div>
+      </div>
+      <div class="f"><label>Affected areas</label><input id="w_areas" value="Three tenant units"></div>
+    </div>
+
+    <div class="card"><h2>Narrative</h2>
+      <div class="f"><label>Status line</label><input id="w_status" value="DRYING IN PROGRESS"></div>
+      <div class="f"><label>Status summary</label><textarea id="w_statustext">Water was extracted from the affected areas. Dehumidifiers and air movers were installed after extraction was complete and are running. Readings are being recorded through the dry-down.</textarea></div>
+      <div class="f"><label>Executive summary</label><textarea id="w_exec">Above &amp; Beyond Property Restoration responded to the property following a water loss and began mitigation the same day.
+
+Standing water was extracted from the affected areas, drying equipment was placed, and moisture readings are being recorded through the dry-down.</textarea>
+        <span class="tip">Blank line between paragraphs.</span></div>
+      <div class="f"><label>Conditions found</label><textarea id="w_cond">Water had migrated from the point of discharge into the adjoining areas.
+Floor outlets had filled with water and tripped the breakers serving those circuits.
+No destructive investigation was performed beyond what is described in this report.</textarea>
+        <span class="tip">One per line.</span></div>
+      <div class="f"><label>What was performed</label><textarea id="w_scope">Inspected the affected areas and documented conditions with photographs and moisture readings.
+Extracted standing water from the affected areas.
+Applied antimicrobial to affected surfaces.
+Placed dehumidifiers and air movers and set the drying configuration.
+Recorded moisture readings at each monitoring visit.</textarea></div>
+      <div class="f"><label>Equipment on site</label><textarea id="w_equip">Dehumidifiers | 4 | September 3, 2026
+Air movers | 12 | September 3, 2026
+HEPA air scrubber | 1 | September 3, 2026</textarea>
+        <span class="tip">One per line: type | units | date placed</span></div>
+      <div class="f"><label>Drying log</label><textarea id="w_log">September 3, 2026 | Extraction completed, equipment placed | Initial readings recorded
+September 4, 2026 | Monitoring visit | Readings recorded
+</textarea>
+        <span class="tip">One per line: date | activity | readings. Never write a number you do not have.</span></div>
+      <div class="f"><label>Result</label><textarea id="w_result">Standing water was removed and the affected areas are under active drying.
+Equipment placement and readings are documented at each visit.
+Drying continues until the recorded readings support a dry standard.</textarea></div>
+      <div class="f"><label>Recommendations</label><textarea id="w_recs">The source of the loss must be corrected by the responsible trade before repairs proceed.
+Keep the affected areas closed to traffic while equipment is running.
+Carpet cleaning and any repairs are quoted separately once the areas read dry.</textarea></div>
+      <div class="f"><label>Conclusion</label><textarea id="w_concl">Above &amp; Beyond Property Restoration performed emergency water mitigation at the property in accordance with the scope above. Drying equipment remains in place and readings are being recorded until a dry standard is supported by the documentation.</textarea></div>
+    </div>
+
+    <div class="card"><h2>Photos</h2>
+      <div class="mut" style="margin-bottom:8px">Shared with the truss report — add them once, they appear in whichever report is selected.</div>
+      <div id="thumbs2" class="thumbs"></div>
+    </div>
+
+    <div class="card"><h2>Pricing</h2>
+      <div class="f"><label>Rate card</label><select id="w_card">
+        <option value="ab">Above &amp; Beyond standard</option>
+        <option value="neal">Neal Communities 2026</option>
+        <option value="county">Manatee County</option></select></div>
+      <div class="g2">
+        <div class="f"><label>Extraction sq ft</label><input id="w_sf" type="number" min="0" step="10" value="300"></div>
+        <div class="f"><label>Days on the job</label><input id="w_days" type="number" min="1" step="1" value="4"></div>
+        <div class="f"><label>Dehumidifiers</label><input id="w_de" type="number" min="0" step="1" value="4"></div>
+        <div class="f"><label>Air movers</label><input id="w_am" type="number" min="0" step="1" value="12"></div>
+        <div class="f"><label>HEPA scrubbers</label><input id="w_sc" type="number" min="0" step="1" value="1"></div>
+        <div class="f"><label>Monitoring visits</label><input id="w_mon" type="number" min="0" step="1" value="3"></div>
+        <div class="f"><label>Technicians</label><input id="w_t" type="number" min="1" step="1" value="2"></div>
+        <div class="f"><label>Labour hours each</label><input id="w_h" type="number" min="0" step="0.5" value="5"></div>
+      </div>
+      <div class="mut" style="font-size:11.5px">Equipment is billed through the day of pickup, supported by the readings. Neal will not pay service calls, trip charges or travel time.</div>
+    </div>
+
+  </div>
 
   <div class="prevwrap"><div class="rpt" id="rpt"></div></div>
 </div>
@@ -266,7 +360,7 @@ function sec(label,bodyHtml,bg){
 }
 function bul(arr){return '<ul class="bl">'+arr.map(function(x){return "<li>"+esc(x)+"</li>"}).join("")+"</ul>"}
 
-function render(){
+function renderTruss(){
  var pages=[];
  var pf=photos.slice(0,4), rest=photos.slice(4);
  var band=pf.length? '<div class="sglgrid">'+pf.map(function(p){
@@ -342,6 +436,135 @@ function render(){
  fit();
 }
 
+
+/* ---------------- water mitigation ---------------- */
+var WR={ab:{n:"Above & Beyond standard",l:94.50,de:174.58,am:46.08,sc:94.66,su:275.63,mo:99.75,ex:0.34},
+ neal:{n:"Neal Communities 2026",l:86.00,de:174.58,am:46.08,sc:94.66,su:275.63,mo:99.75,ex:0.34},
+ county:{n:"Manatee County",l:57.50,de:86.25,am:31.62,sc:94.66,su:275.63,mo:99.75,ex:0.34}};
+function N(i){var v=parseFloat(($(i)?$(i).value:"")); return isFinite(v)&&v>0?v:0;}
+function rows(i){return lines(i).map(function(x){return x.split("|").map(function(y){return y.trim()})});}
+
+function headW(){
+ var r=[["Property Address",V("w_addr")],["",V("w_city")],["Job Number",V("w_job")],
+  ["Date of Loss",V("w_dol")],["Response",V("w_resp")],["Report Date",V("w_drep")],
+  ["Prepared For",V("w_client")],["Prepared By","Above & Beyond Property Restoration"]];
+ var t=r.map(function(x){return '<tr><td class="hk">'+esc(x[0])+'</td><td class="hv">'+esc(x[1])+'</td></tr>'}).join("");
+ return '<div class="hdr"><div class="hdl"><img class="logo" src="'+LOGO+'"></div>'
+  +'<div class="hdc"><div class="cline"><b>Above &amp; Beyond Property Restoration</b></div>'
+  +'<div class="cline">3720 26th St. W, Suite 1</div><div class="cline">Bradenton, FL 34205</div>'
+  +'<div class="cline">941-404-3992</div><div class="cline">www.goaboveandbeyond.us</div></div>'
+  +'<div class="hdr2"><div class="doctitle">WATER MITIGATION REPORT</div><table class="htab">'+t+'</table></div></div>';
+}
+
+function renderWater(){
+ var pages=[];
+ var pf=photos.slice(0,4), rest=photos.slice(4);
+ var band=pf.length? '<div class="sglgrid">'+pf.map(function(p){
+   return '<figure class="sgl"><img src="'+p.src+'"><figcaption>'+esc(p.cap)+'</figcaption></figure>'}).join("")+'</div>' : '';
+
+ var info=[["Property Address",V("w_addr")+", "+V("w_city")],["Client",V("w_client")],
+  ["Client Contact",V("w_contact")],["Date of Loss",V("w_dol")],["Cause of Loss",V("w_cause")],
+  ["Category of Water",V("w_cat")],["Class of Loss",V("w_cls")],["Areas Affected",V("w_areas")],
+  ["Response",V("w_resp")],["Field Personnel",V("w_crew")]].filter(function(r){return r[1]});
+ var pinfo=info.map(function(r){return '<tr><td class="pk">'+esc(r[0])+'</td><td class="pv">'+esc(r[1])+'</td></tr>'}).join("");
+
+ var left = sec("EXECUTIVE SUMMARY",'<div class="body">'+paras("w_exec").map(function(x){return "<p>"+esc(x)+"</p>"}).join("")+'</div>')
+   + '<div class="sec pinfo"><div class="pib">LOSS INFORMATION</div><table class="ptab">'+pinfo+'</table></div>'
+   + sec("CONDITIONS FOUND", bul(lines("w_cond")));
+
+ var right = '<div class="baband">DOCUMENTED ON SITE</div>'+band
+   + '<div class="rr"><div class="rrc">'+sec("RESULT",bul(lines("w_result")),"#17A2A8")+'</div>'
+   + '<div class="rrc">'+sec("RECOMMENDATIONS",bul(lines("w_recs")))+'</div></div>'
+   + sec("WHAT WAS PERFORMED",'<div class="two">'+bul(lines("w_scope"))+'</div>');
+
+ var sig='<div class="sigwrap"><div class="sigline"><img src="'+SIG+'"></div>'
+   +'<div class="signm"><b>Jacob Mercer</b><br>General Manager<br>Florida Mold Remediator MRSR3802<br>Florida Mold Assessor MRSA4360<br>IICRC WRT, FSRT, AMRT</div>'
+   +'<div class="sigdate">'+esc(V("w_drep"))+'<div class="dlab">Date</div></div></div>';
+
+ var lims=["Readings and observations are limited to the areas described and to the dates recorded.",
+  "No destructive investigation was performed unless stated in this report.",
+  "This report does not include testing, sampling or laboratory analysis.",
+  "Correction of the source of the loss is not included and belongs to the responsible trade.",
+  "Equipment is billed by the day it is on the job through the day of pickup, supported by the recorded readings."];
+
+ var btm='<div class="btm"><div class="bc">'+sec("LIMITATIONS & EXCLUSIONS",bul(lims))+'</div>'
+   +'<div class="bc">'+sec("CONCLUSION",'<div class="body"><p>'+esc(V("w_concl"))+'</p></div>',"#17A2A8")+'</div>'
+   +'<div class="bc">'+sec("SIGNATURE",sig)+'</div></div>';
+
+ pages.push('<div class="page">'+headW()
+   +'<div class="baband" style="margin-bottom:3mm">'+esc(V("w_status"))+'</div>'
+   +'<div class="cols"><div class="lcol">'+left+'</div><div class="rcol">'+right+'</div></div>'+btm+'</div>');
+
+ var eq=rows("w_equip"), lg=rows("w_log");
+ if(eq.length||lg.length){
+  var h='<div class="baband">EQUIPMENT AND DRYING LOG</div><div class="prwrap" style="display:block">';
+  if(eq.length){
+   h+='<table class="btab" style="margin-top:4mm"><thead><tr><th>Equipment</th><th>Units</th><th>Placed</th></tr></thead><tbody>'
+    +eq.map(function(r){return '<tr><td>'+esc(r[0]||"")+'</td><td>'+esc(r[1]||"")+'</td><td>'+esc(r[2]||"")+'</td></tr>'}).join("")
+    +'</tbody></table>';
+  }
+  if(lg.length){
+   h+='<table class="btab" style="margin-top:6mm"><thead><tr><th>Date</th><th>Activity</th><th>Readings</th></tr></thead><tbody>'
+    +lg.map(function(r){return '<tr><td>'+esc(r[0]||"")+'</td><td>'+esc(r[1]||"")+'</td><td>'+esc(r[2]||"")+'</td></tr>'}).join("")
+    +'</tbody></table>';
+  }
+  h+='<div class="notes"><p>Readings are recorded at each monitoring visit and support the equipment days billed. Drying continues until the recorded readings support a dry standard.</p></div></div>';
+  pages.push('<div class="page">'+headW()+h+'</div>');
+ }
+
+ for(var i=0;i<rest.length;i+=12){
+  var cells=rest.slice(i,i+12).map(function(p){
+   return '<figure class="pf"><img src="'+p.src+'"><figcaption>'+esc(p.cap)+'</figcaption></figure>'}).join("");
+  pages.push('<div class="page">'+headW()+'<div class="baband">PHOTO DOCUMENTATION</div><div class="grid">'+cells+'</div></div>');
+ }
+
+ var c=WR[$("w_card").value]||WR.ab, L=[], tot=0;
+ var sf=N("w_sf"), dy=Math.max(1,Math.round(N("w_days")||1));
+ var de=Math.round(N("w_de")), am=Math.round(N("w_am")), scb=Math.round(N("w_sc"));
+ var wt=Math.max(1,Math.round(N("w_t")||1)), wh=N("w_h"), th=wt*wh, mv=Math.round(N("w_mon"));
+ function add(d,a){L.push([d,a]);tot+=a;}
+ if(sf>0) add("Water extraction - approximately "+sf+" square feet", sf*c.ex);
+ if(de>0) add("Dehumidifiers - "+de+" unit"+(de===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"), de*dy*c.de);
+ if(am>0) add("Air movers - "+am+" unit"+(am===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"), am*dy*c.am);
+ if(scb>0) add("HEPA air scrubbers - "+scb+" unit"+(scb===1?"":"s")+", "+dy+" day"+(dy===1?"":"s"), scb*dy*c.sc);
+ if(th>0) add("Mitigation labour - extraction, equipment placement and manipulation - "+wt+" technician"+(wt===1?"":"s")+", "+wh+" hour"+(wh===1?"":"s")+" each ("+th+" technician hours)", th*c.l);
+ add("Equipment setup, adjustment and removal", c.su);
+ if(mv>0) add("Moisture monitoring - "+mv+" visit"+(mv===1?"":"s")+" during the dry-down", mv*c.mo);
+ add("Antimicrobial and consumables allowance", 75);
+ var T=money(tot);
+ var body='<div class="baband">PRICING SUMMARY</div><div class="prwrap"><div class="prleft">'
+  +'<div class="body"><p>Priced to the '+esc(c.n)+' rate card. Equipment is billed by the day it is on the job through the day of pickup, supported by the recorded readings. Labour hours are to be confirmed against technician timesheets.</p></div>'
+  +'<table class="btab"><thead><tr><th>Description</th><th class="amt">Amount</th></tr></thead><tbody>'
+  +L.map(function(x){return '<tr><td>'+esc(x[0])+'</td><td class="amt">'+money(x[1])+'</td></tr>'}).join("")
+  +'<tr class="tot"><td>TOTAL</td><td class="amt">'+T+'</td></tr></tbody></table>'
+  +'<div class="notes"><p>Not included: correction of the source of the loss, third-party testing, repairs and any cleaning quoted separately once the areas read dry.</p>'
+  +($("w_card").value==="neal"?'<p>No service call, trip charge or travel time is billed on this job.</p>':'')
+  +'</div></div>'
+  +'<div class="prright"><div class="totbox"><div class="tl">TOTAL TO DATE</div><div class="tv">'+T+'</div>'
+  +'<div class="tn">Equipment billed through the day of pickup.</div></div>'
+  +'<div class="inclbox"><div class="ib">WHAT THIS PRICE INCLUDES</div>'
+  +bul(["Emergency response and extraction","Equipment placement, adjustment and removal",
+        "Monitoring visits and recorded readings","Antimicrobial application","Photographic documentation and this report"])
+  +'</div></div></div>'
+  +'<div class="lic">Above &amp; Beyond Property Restoration &nbsp;|&nbsp; FL GC License CGC1535240 &nbsp;|&nbsp; Mold Remediator MRSR3802 &nbsp;|&nbsp; IICRC 57858351</div>';
+ pages.push('<div class="page">'+headW()+body+'</div>');
+
+ var n=pages.length;
+ $("rpt").innerHTML = pages.map(function(p,i){return p.slice(0,-6)+foot(i+1,n)+"</div>"}).join("");
+ fit();
+}
+
+var mode="stc";
+function render(){ if(mode==="wtr") renderWater(); else renderTruss(); }
+Array.prototype.forEach.call(document.querySelectorAll(".seg2 .sb"),function(b){
+ b.addEventListener("click",function(){
+  mode=b.getAttribute("data-m");
+  Array.prototype.forEach.call(document.querySelectorAll(".seg2 .sb"),function(x){x.setAttribute("aria-pressed",String(x===b))});
+  $("form-stc").hidden=(mode!=="stc"); $("form-wtr").hidden=(mode!=="wtr");
+  render();
+ });
+});
+
 function fit(){
  var w=$("rpt").parentNode.clientWidth-28;
  var pw=794; // 210mm at 96dpi
@@ -353,7 +576,10 @@ function fit(){
 window.addEventListener("resize",fit);
 
 function drawThumbs(){
- var box=$("thumbs"); box.innerHTML="";
+ [$("thumbs"),$("thumbs2")].forEach(function(box){ if(box) fillThumbs(box); });
+}
+function fillThumbs(box){
+ box.innerHTML="";
  if(!photos.length){box.innerHTML='<div class="mut">No photos yet. The report still builds without them.</div>';return;}
  photos.forEach(function(p,idx){
   var d=document.createElement("div"); d.className="th";
