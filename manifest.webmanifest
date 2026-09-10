@@ -1,0 +1,26 @@
+{
+  "id": "/",
+  "name": "Above & Beyond Operations",
+  "short_name": "A&B Ops",
+  "description": "Today's schedule, active jobs, construction, receivables and the estimate and report builders for Above & Beyond Property Restoration.",
+  "start_url": "/?src=app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#3B2A5A",
+  "theme_color": "#3B2A5A",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Today", "short_name": "Today", "url": "/?src=app", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Field view", "short_name": "Field", "url": "/field", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Crew route", "short_name": "Route", "url": "/route", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Estimate builder", "short_name": "Estimate", "url": "/estimate", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Report builder", "short_name": "Report", "url": "/report", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
