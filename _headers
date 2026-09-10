@@ -1,0 +1,3 @@
+/field/sw.js
+  Service-Worker-Allowed: /field
+  Cache-Control: no-cache
