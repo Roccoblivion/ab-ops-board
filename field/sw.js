@@ -6,7 +6,7 @@ var VERSION = 'fv1';
 var SHELL = 'abf-shell-' + VERSION;
 var PAGES = 'abf-pages-' + VERSION;
 var PRECACHE = [
-  '/field/offline.html',
+  '/field/offline',
   '/field/manifest.webmanifest',
   '/field/icon-192.png',
   '/field/icon-512.png',
@@ -56,7 +56,7 @@ self.addEventListener('fetch', function (event) {
       }).catch(function () {
         return caches.match(req, { ignoreSearch: true }).then(function (hit) {
           if (hit) return hit;
-          return caches.match('/field/offline.html').then(function (off) {
+          return caches.match('/field/offline').then(function (off) {
             return off || new Response('Offline', { status: 503, headers: { 'content-type': 'text/plain' } });
           });
         });
