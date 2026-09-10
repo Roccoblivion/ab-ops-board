@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>No connection - A&amp;B Operations</title>
+<meta name="theme-color" content="#3B2A5A">
+<link rel="icon" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  :root{--ink:#1c1830;--muted:#6b7280;--line:#e4e6ec;--card:#ffffff;--bg:#f2f3f7;--brand:#3B2A5A;--accent:#17A2A8}
+  @media (prefers-color-scheme:dark){:root{--ink:#f2f1f7;--muted:#a8a4b8;--line:#3a3450;--card:#241f38;--bg:#181428}}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       padding:24px;background:var(--bg);color:var(--ink);
+       font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);
+        border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(20,16,40,.08)}
+  .top{background:linear-gradient(100deg,#3B2A5A,#4d3878);color:#fff;padding:22px 24px}
+  .top h1{margin:0;font-size:19px;letter-spacing:.2px}
+  .top p{margin:6px 0 0;font-size:13px;opacity:.85}
+  .body{padding:22px 24px 24px}
+  .body p{margin:0 0 14px;color:var(--muted);font-size:14.5px}
+  .body p strong{color:var(--ink)}
+  button{appearance:none;border:0;border-radius:10px;background:var(--brand);color:#fff;
+         font:600 15px/1 inherit;padding:13px 18px;width:100%;cursor:pointer}
+  button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .hint{margin-top:14px;font-size:12.5px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="top">
+      <h1>No connection</h1>
+      <p>Above &amp; Beyond Operations</p>
+    </div>
+    <div class="body">
+      <p>This page hasn't been opened on this device yet, so there's no saved copy to show.</p>
+      <p><strong>Pages you have already opened will still load offline</strong> with the numbers from the last time you had signal.</p>
+      <button type="button" onclick="location.reload()">Try again</button>
+      <div class="hint">Reconnects on its own once you have signal.</div>
+    </div>
+  </main>
+  <script>
+    addEventListener('online', function(){ location.reload(); });
+  </script>
+</body>
+</html>
