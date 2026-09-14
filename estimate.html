@@ -42,7 +42,7 @@ tr.tot td{background:#2b2743;font-weight:700;font-size:14px;color:var(--p);borde
 #toast{font-size:12px;color:var(--ok)}
 </style></head><body><div class="wrap">
 <div class="top"><div><h1>Estimate Builder</h1>
-<div class="mut">Rates effective 1 September 2026. Description and amount only, the way it goes on a client document. <b>Opens blank every time</b> - no quantity is filled in for you.</div></div>
+<div class="mut">Rates effective 15 September 2026. Description and amount only, the way it goes on a client document. <b>Opens blank every time</b> - no quantity is filled in for you.</div></div>
 <div class="mut"><a href="/">&larr; Ops board</a></div></div>
 <div class="cols"><div>
 <div class="card"><h2>The job</h2><div class="g2">
@@ -54,14 +54,15 @@ tr.tot td{background:#2b2743;font-weight:700;font-size:14px;color:var(--p);borde
 <div class="card"><h2>Type of work</h2>
 <div class="seg"><button type="button" data-k="stc" aria-pressed="true">Truss cleaning</button><button type="button" data-k="mld" aria-pressed="false">Mold treatment</button><button type="button" data-k="wtr" aria-pressed="false">Water mitigation</button></div>
 <div id="p-stc">
-<label class="tier"><input type="radio" name="tier" value="350"><span><b>Spot</b><em>Up to 3 isolated spots, about 10 sq ft or less. About an hour on site.</em></span><span class="a">$350</span></label>
-<label class="tier"><input type="radio" name="tier" value="650"><span><b>Section</b><em>One area, or 4 to 10 scattered spots. Two to three hours.</em></span><span class="a">$650</span></label>
-<label class="tier"><input type="radio" name="tier" value="950"><span><b>Multi-area</b><em>More than one area, up to about half the trusses. Three to four hours.</em></span><span class="a">$950</span></label>
-<label class="tier"><input type="radio" name="tier" value="1200"><span><b>Full structure</b><em>All or nearly all trusses, whole attic. Four to six hours.</em></span><span class="a">$1,200</span></label>
-<label class="tier"><input type="radio" name="tier" value="1550"><span><b>Oversized</b><em>Over roughly 3,000 sq ft under roof, or more than one attic system.</em></span><span class="a">$1,550</span></label>
+<label class="tier"><input type="radio" name="tier" value="750"><span><b>Spot</b><em>Up to 3 isolated spots, about 10 sq ft or less. About an hour on site.</em></span><span class="a">$750</span></label>
+<label class="tier"><input type="radio" name="tier" value="1000"><span><b>Section</b><em>One area, or 4 to 10 scattered spots. Two to three hours.</em></span><span class="a">$1,000</span></label>
+<label class="tier"><input type="radio" name="tier" value="1250"><span><b>Multi-area</b><em>More than one area, up to about half the trusses. Three to four hours.</em></span><span class="a">$1,250</span></label>
+<label class="tier"><input type="radio" name="tier" value="1850"><span><b>Full structure</b><em>All or nearly all trusses, whole attic. Four to six hours.</em></span><span class="a">$1,850</span></label>
+<label class="tier"><input type="radio" name="tier" value="2200"><span><b>Oversized</b><em>Over roughly 3,000 sq ft under roof, or more than one attic system.</em></span><span class="a">$2,200</span></label>
 <label class="ck"><input type="checkbox" id="s_after"><span>After-hours or weekend <small>Adds $100</small></span></label>
 <label class="ck"><input type="checkbox" id="s_fog"><span>Whole-attic antimicrobial fog <small>Adds $150 on Spot, Section and Multi-area only</small></span></label>
-<label class="ck"><input type="checkbox" id="s_re"><span>Return re-clean <small>Flat $350, replaces the tier price</small></span></label>
+<label class="ck"><input type="checkbox" id="s_re"><span>Return re-clean <small>Flat $750 (Tier 1 rate), replaces the tier price</small></span></label>
+<label class="ck"><input type="checkbox" id="s_mep"><span>MEP installed <small>Framing has mechanical, electrical and plumbing systems in place - adds 50%</small></span></label>
 </div>
 <div id="p-mld" hidden><div class="g3">
 <div class="f"><label>Technicians</label><input id="m_t" type="number" min="1" step="1" placeholder="e.g. 2"></div>
@@ -108,13 +109,16 @@ function build(){
  var c=R[$("ratecard").value]||R.ab,cl=$("client").value,L=[],N=[],rep=0;
  if(kind==="stc"){
   var tsel=document.querySelector("input[name=tier]:checked");
-  if($("s_re").checked){L.push(["Return re-clean of previously treated truss and framing surfaces, single visit; photographic documentation and completion report included",350]);}
+  var mep=$("s_mep").checked;
+  var mepDesc=mep?"; framing has mechanical, electrical and plumbing systems installed, requiring additional access and care":"";
+  if($("s_re").checked){L.push(["Return re-clean of previously treated truss and framing surfaces, single visit; photographic documentation and completion report included"+mepDesc,mep?1125:750]);}
   else if(tsel){var t=parseFloat(tsel.value);
-   L.push(["Truss treatment - cleaning and antimicrobial application to affected truss and framing surfaces, single visit; photographic documentation and completion report included",t]);
-   if($("s_fog").checked&&t<=950)L.push(["Whole-attic antimicrobial fog",150]);}
+   L.push(["Truss treatment - cleaning and antimicrobial application to affected truss and framing surfaces, single visit; photographic documentation and completion report included"+mepDesc,mep?t*1.5:t]);
+   if($("s_fog").checked&&t<=1250)L.push(["Whole-attic antimicrobial fog",150]);}
   else{return {L:[],tot:0,N:[],rep:0,c:c,empty:"Pick a tier, or tick Return re-clean."};}
   if($("s_after").checked)L.push(["After-hours response",100]);
   N.push(["","Tier is set by <b>extent, not hours</b>. In doubt between two tiers, quote the higher and say why."]);
+  if(mep)N.push(["","MEP premium applied - 50% added because the framing has mechanical, electrical and plumbing systems already installed."]);
   N.push(["","Do not print the tier name on the client document."]);}
  if(kind==="mld"){
   if(V("m_t")<=0||V("m_h")<=0){return {L:[],tot:0,N:[],rep:0,c:c,empty:"Enter the number of technicians and the hours on site."};}
@@ -185,7 +189,7 @@ $("client").addEventListener("change",function(){
 $("newest").addEventListener("click",function(){
  Array.prototype.forEach.call(document.querySelectorAll("input[type=number]"),function(i){i.value="";});
  Array.prototype.forEach.call(document.querySelectorAll("input[name=tier]"),function(i){i.checked=false;});
- ["s_after","s_fog","s_re","m_r","w_g"].forEach(function(k){$(k).checked=false;});
+ ["s_after","s_fog","s_re","s_mep","m_r","w_g"].forEach(function(k){$(k).checked=false;});
  ["m_demo","m_c","w_su","w_c"].forEach(function(k){$(k).checked=true;});
  $("jobname").value="";$("client").value="";$("ratecard").value="ab";$("w_e").value="0";
  $("toast").textContent="Cleared. New estimate.";setTimeout(function(){$("toast").textContent=""},3000);
