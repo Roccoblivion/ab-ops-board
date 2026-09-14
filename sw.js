@@ -1,12 +1,18 @@
 /* Above & Beyond Operations - service worker
-   Strategy:
-     navigation  -> network first, fall back to the last good copy, then /offline.html
-     static file -> cache first
-   Never caches a Cloudflare Access login redirect as if it were the board. */
+   v2 - 14 September 2026
 
-var VERSION = 'v1';
+   IMPORTANT: this worker deliberately does NOT intercept page navigations.
+   The board sits behind Cloudflare Access. When an Access session expires,
+   a navigation returns a redirect to the login screen. A service worker
+   cannot read or safely re-serve that redirect, and the page comes back
+   blank instead of showing the sign-in screen. Letting the browser handle
+   navigations itself fixes that, at the cost of an offline page on
+   navigation - which is no real loss on a board whose whole value is live
+   data. Static files are still cached so the shell loads fast.
+*/
+
+var VERSION = 'v2';
 var SHELL   = 'ab-shell-' + VERSION;
-var PAGES   = 'ab-pages-' + VERSION;
 var PRECACHE = [
   '/offline.html',
   '/manifest.webmanifest',
@@ -37,6 +43,10 @@ self.addEventListener('activate', function (e) {
   );
 });
 
+self.addEventListener('message', function (e) {
+  if (e.data === 'skip-waiting') self.skipWaiting();
+});
+
 function usable(res) {
   if (!res || !res.ok) return false;
   if (res.type === 'opaqueredirect' || res.redirected) return false;
@@ -44,52 +54,31 @@ function usable(res) {
   return true;
 }
 
-self.addEventListener('message', function (e) {
-  if (e.data === 'skip-waiting') self.skipWaiting();
-});
-
 self.addEventListener('fetch', function (event) {
   var req = event.request;
+
+  // Navigations are handled by the browser. Do not touch them.
+  if (req.mode === 'navigate') return;
   if (req.method !== 'GET') return;
 
   var url;
   try { url = new URL(req.url); } catch (e) { return; }
   if (url.origin !== self.location.origin) return;
 
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req).then(function (net) {
+  if (!/\.(png|jpg|jpeg|gif|svg|ico|css|js|webmanifest|woff2?)$/i.test(url.pathname)) return;
+
+  event.respondWith(
+    caches.match(req).then(function (hit) {
+      if (hit) return hit;
+      return fetch(req).then(function (net) {
         if (usable(net)) {
           var copy = net.clone();
-          caches.open(PAGES).then(function (c) { c.put(req, copy); });
+          caches.open(SHELL).then(function (c) { c.put(req, copy); });
         }
         return net;
       }).catch(function () {
-        return caches.match(req, { ignoreSearch: true }).then(function (hit) {
-          if (hit) return hit;
-          return caches.match('/offline.html').then(function (off) {
-            return off || new Response('Offline', { status: 503, headers: { 'content-type': 'text/plain' } });
-          });
-        });
-      })
-    );
-    return;
-  }
-
-  if (/\.(png|jpg|jpeg|gif|svg|ico|css|js|webmanifest|woff2?)$/i.test(url.pathname)) {
-    event.respondWith(
-      caches.match(req).then(function (hit) {
-        if (hit) return hit;
-        return fetch(req).then(function (net) {
-          if (usable(net)) {
-            var copy = net.clone();
-            caches.open(SHELL).then(function (c) { c.put(req, copy); });
-          }
-          return net;
-        }).catch(function () {
-          return new Response('', { status: 504 });
-        });
-      })
-    );
-  }
+        return new Response('', { status: 504 });
+      });
+    })
+  );
 });
