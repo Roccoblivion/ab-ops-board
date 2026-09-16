@@ -669,20 +669,32 @@ function abApplyJob(job){
   var jn=((name.match(/(\d{2}-\d{4}-[A-Za-z]{3})/)||[])[1]||"").toUpperCase();
   var addr=p.address||name.replace(/-\s*\d{2}-\d{4}-[A-Za-z]{3}\s*$/,"").trim();
   var city=p.city?(p.city+", FL"):"";
-  var client=p.org||p.customerName||"";
+  // client (organization) and contact live in the timeline, not the project object
+  var client=p.org||p.customerName||"", contact="";
+  for(var oi=0;oi<tl.length;oi++){
+    var om=tl[oi].message||"";
+    if(!client){ var og=om.match(/Organization\s+(.+?)\s+was added/i); if(og) client=og[1].trim(); }
+    if(!contact){ var cg=om.match(/Contact\s+(.+?)\s+was added/i); if(cg) contact=cg[1].trim(); }
+  }
+  if(contact.indexOf(",")>=0){ var pp=contact.split(","); contact=((pp[1]||"").trim()+" "+(pp[0]||"").trim()).trim(); }
   var crew="";
   for(var i=tl.length-1;i>=0;i--){ if(tl[i].type==="scheduler_event"){ var mm=(tl[i].message||"").match(/attendees?\s+(.+?)\s*$/i); if(mm){ crew=mm[1].replace(/\s+/g," ").replace(/\.$/,"").trim(); break; } } }
   var today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
-  var vals={addr:addr,city:city,job:jn,client:client,crew:crew,drep:today};
-  ["i_","w_"].forEach(function(px){ for(var kk in vals){ abSet(px+kk, vals[kk]); } });
-  // water-only: cause / areas from a structured field-estimator block, if one was posted
-  var blk=""; for(var b2=tl.length-1;b2>=0;b2--){ var msg=tl[b2].message||""; if(/Cause\s*\/\s*what happened/i.test(msg)){ blk=msg; break; } }
+  // force-set the identifying fields so a loaded job never keeps a sample default
+  function abForce(id,val){ var el=$(id); if(el) el.value=(val==null?"":val); }
+  var ids={addr:addr,city:city,job:jn,client:client,contact:contact,crew:crew,drep:today};
+  ["i_","w_"].forEach(function(px){ for(var kk in ids){ abForce(px+kk, ids[kk]); } });
+  abForce("i_dwork",""); abForce("w_dol",""); abForce("w_resp","");
+  // water: cause / areas from a structured field-estimator block, if one was posted
+  var wc="", wa="", blk="";
+  for(var b2=tl.length-1;b2>=0;b2--){ var msg=tl[b2].message||""; if(/Cause\s*\/\s*what happened/i.test(msg)){ blk=msg; break; } }
   if(blk){
     var cm=blk.match(/Cause\s*\/\s*what happened\s*:?\s*([^\n]+)/i);
     var am=blk.match(/Rooms\s*\/\s*areas affected\s*:?\s*([^\n]+)/i);
-    if(cm){ var cz=cm[1].trim(); if(cz.length>110) cz=cz.slice(0,110).replace(/\s+\S*$/,"")+"..."; abSet("w_cause", cz); }
-    if(am){ abSet("w_areas", am[1].trim()); }
+    if(cm){ wc=cm[1].trim(); if(wc.length>110) wc=wc.slice(0,110).replace(/\s+\S*$/,"")+"..."; }
+    if(am){ wa=am[1].trim(); }
   }
+  abForce("w_cause", wc); abForce("w_areas", wa);
   render();
   var note="Loaded "+name+".";
   if(!m && suf==="MLD") note+=" Mold report mode isn't in the builder yet - pick Truss or Water; the job details are filled in both.";
