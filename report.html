@@ -169,7 +169,7 @@ h1{font-size:20px;margin:0}.mut{color:var(--mut);font-size:12px}
   <button class="btn" id="print">Save as PDF</button>
   <button class="btn ghost" id="addphotos">Add photos</button>
   <input type="file" id="files" accept="image/*" multiple hidden>
-  <span class="seg2" role="group" aria-label="Report type"><button type="button" class="sb" data-m="stc" aria-pressed="true">Truss cleaning</button><button type="button" class="sb" data-m="wtr" aria-pressed="false">Water mitigation</button></span>
+  <span class="seg2" role="group" aria-label="Report type"><button type="button" class="sb" data-m="stc" aria-pressed="true">Truss cleaning</button><button type="button" class="sb" data-m="wtr" aria-pressed="false">Water mitigation</button><button type="button" class="sb" data-m="mld" aria-pressed="false">Mold treatment</button></span>
   <span class="mut" id="status">Ctrl+P also works. Choose "Save as PDF", margins None, and tick Background graphics.</span>
 </div>
 
@@ -334,6 +334,59 @@ Carpet cleaning and any repairs are quoted separately once the areas read dry.</
       <div class="mut" style="font-size:11.5px">Equipment is billed through the day of pickup, supported by the readings. Neal will not pay service calls, trip charges or travel time.</div><div class="mut" id="w_ratenote" style="font-size:11.5px;margin-top:6px"></div>
     </div>
 
+  </div>
+  <div id="form-mld" hidden>
+    <div class="hintbox">Mold work is a treatment. Write treated or cleaned to match the field note - never remediation unless we removed material. Never state an area is mold-free.</div>
+    <div class="card"><h2>Job</h2>
+      <div class="f"><label>Property address</label><input id="m_addr" value=""></div>
+      <div class="g2">
+        <div class="f"><label>City, state, zip</label><input id="m_city" value=""></div>
+        <div class="f"><label>Job number</label><input id="m_job" value=""></div>
+        <div class="f"><label>Visit dates</label><input id="m_visit" value=""></div>
+        <div class="f"><label>Report date</label><input id="m_drep" value=""></div>
+        <div class="f"><label>Prepared for</label><input id="m_client" value=""></div>
+        <div class="f"><label>Client contact</label><input id="m_contact" value=""></div>
+      </div>
+      <div class="f"><label>Field personnel</label><input id="m_crew" value=""><span class="tip">From the Albi scheduler event attendees.</span></div>
+      <div class="f"><label>Area addressed</label><input id="m_areas" value=""></div>
+    </div>
+    <div class="card"><h2>Narrative</h2>
+      <div class="f"><label>Status line</label><input id="m_status" value="TREATMENT COMPLETE"></div>
+      <div class="f"><label>Status summary</label><textarea id="m_statustext">Above &amp; Beyond cleaned and treated the affected areas. This is a cleaning and antimicrobial treatment; no building materials were removed by Above &amp; Beyond unless stated.</textarea></div>
+      <div class="f"><label>Executive summary</label><textarea id="m_exec">Above &amp; Beyond Property Restoration was engaged to address microbial growth reported at the property.
+
+The affected surfaces were HEPA-vacuumed, cleaned and treated with an EPA-registered antimicrobial, and conditions were documented with photographs on each visit.</textarea><span class="tip">Blank line between paragraphs.</span></div>
+      <div class="f"><label>What was found</label><textarea id="m_found">Microbial growth was present on the surfaces described.
+The growth observed was surface staining on the finish and framing surfaces.
+No laboratory sampling was performed; conditions are described as observed.</textarea><span class="tip">One per line.</span></div>
+      <div class="f"><label>What was performed</label><textarea id="m_scope">Protected the work area and adjacent finishes and contents.
+HEPA-vacuumed and detail-cleaned the affected surfaces.
+Applied an EPA-registered antimicrobial to the cleaned surfaces.
+Documented conditions with photographs.</textarea><span class="tip">One step per line.</span></div>
+      <div class="f"><label>Result</label><textarea id="m_result">The affected surfaces were HEPA-vacuumed, cleaned and treated with an EPA-registered antimicrobial.
+The treated surfaces present a visibly cleaner condition.
+No building materials were removed by Above &amp; Beyond unless stated in this report.</textarea></div>
+      <div class="f"><label>Recommendations</label><textarea id="m_recs">The moisture source must be confirmed corrected by the responsible trade before the area is closed back up.
+Restore the finishes once the framing is dry and the source is corrected.
+Independent post-treatment clearance testing, if elected, is a separate service.</textarea></div>
+      <div class="f"><label>Conclusion</label><textarea id="m_concl">Above &amp; Beyond Property Restoration cleaned and treated the affected areas in accordance with the scope above. No area is represented as free of mold on the basis of visual observation.</textarea></div>
+    </div>
+    <div class="card"><h2>Photos</h2>
+      <div class="mut" style="margin-bottom:8px">Shared with the other reports - add once, or pull them from Albi above.</div>
+      <div id="thumbs3" class="thumbs"></div>
+    </div>
+    <div class="card"><h2>Pricing</h2>
+      <div class="f"><label>Rate card</label><select id="m_card"><option value="ab">Above &amp; Beyond standard</option><option value="neal">Neal Communities 2026</option></select></div>
+      <div class="g2">
+        <div class="f"><label>Technicians</label><input id="m_t" type="number" min="1" step="1" value="2"></div>
+        <div class="f"><label>Hours on site (each)</label><input id="m_h" type="number" min="0" step="0.5" value="3"></div>
+        <div class="f"><label>Scrubber days</label><input id="m_scr" type="number" min="0" step="1" value="0"></div>
+      </div>
+      <div class="f"><label class="ck"><input type="checkbox" id="m_demo"> Material was removed by us (adds disposal and equipment decontamination)</label></div>
+      <div class="f"><label class="ck"><input type="checkbox" id="m_cons" checked> Antimicrobial, sheeting, PPE and consumables ($75)</label></div>
+      <div class="mut" id="m_ratenote" style="font-size:11.5px;margin-top:4px"></div>
+      <div class="mut" style="font-size:11.5px">No monitoring-visit line on a mold job. Labour hours to be confirmed against timesheets. Never state an area is mold-free.</div>
+    </div>
   </div>
   </div>
 
@@ -571,13 +624,87 @@ function renderWater(){
  fit();
 }
 
+function headM(){
+ var r=[["Property Address",V("m_addr")],["",V("m_city")],["Job Number",V("m_job")],
+  ["Visits",V("m_visit")],["Report Date",V("m_drep")],
+  ["Prepared For",V("m_client")],["Prepared By","Above & Beyond Property Restoration"]];
+ var t=r.map(function(x){return '<tr><td class="hk">'+esc(x[0])+'</td><td class="hv">'+esc(x[1])+'</td></tr>'}).join("");
+ return '<div class="hdr"><div class="hdl"><img class="logo" src="'+LOGO+'"></div>'
+  +'<div class="hdc"><div class="cline"><b>Above &amp; Beyond Property Restoration</b></div>'
+  +'<div class="cline">3720 26th St. W, Suite 1</div><div class="cline">Bradenton, FL 34205</div>'
+  +'<div class="cline">941-404-3992</div><div class="cline">www.goaboveandbeyond.us</div></div>'
+  +'<div class="hdr2"><div class="doctitle">MOLD TREATMENT REPORT</div><table class="htab">'+t+'</table></div></div>';
+}
+var MR={ab:{n:"Above & Beyond standard",l:94.50},neal:{n:"Neal Communities 2026",l:86.00}};
+function renderMold(){
+ var pages=[];
+ var pf=photos.slice(0,4), rest=photos.slice(4);
+ var band=pf.length? '<div class="sglgrid">'+pf.map(function(p){return '<figure class="sgl"><img src="'+p.src+'"><figcaption>'+esc(p.cap)+'</figcaption></figure>'}).join("")+'</div>' : '';
+ var info=[["Property Address",V("m_addr")+", "+V("m_city")],["Client",V("m_client")],
+  ["Client Contact",V("m_contact")],["Area Addressed",V("m_areas")],["Visits",V("m_visit")],
+  ["Field Personnel",V("m_crew")]].filter(function(r){return r[1] && r[1]!==", "});
+ var pinfo=info.map(function(r){return '<tr><td class="pk">'+esc(r[0])+'</td><td class="pv">'+esc(r[1])+'</td></tr>'}).join("");
+ var left = sec("EXECUTIVE SUMMARY",'<div class="body">'+paras("m_exec").map(function(x){return "<p>"+esc(x)+"</p>"}).join("")+'</div>')
+   + '<div class="sec pinfo"><div class="pib">PROJECT INFORMATION</div><table class="ptab">'+pinfo+'</table></div>'
+   + sec("WHAT WAS FOUND", bul(lines("m_found")));
+ var right = '<div class="baband">DOCUMENTED ON SITE</div>'+band
+   + '<div class="rr"><div class="rrc">'+sec("RESULT",bul(lines("m_result")),"#17A2A8")+'</div>'
+   + '<div class="rrc">'+sec("RECOMMENDATIONS",bul(lines("m_recs")))+'</div></div>'
+   + sec("WHAT WAS PERFORMED",'<div class="two">'+bul(lines("m_scope"))+'</div>');
+ var sig='<div class="sigwrap"><div class="sigline"><img src="'+SIG+'"></div>'
+   +'<div class="signm"><b>Jacob Mercer</b><br>General Manager<br>Florida Mold Remediator MRSR3802<br>Florida Mold Assessor MRSA4360<br>IICRC WRT, FSRT, AMRT</div>'
+   +'<div class="sigdate">'+esc(V("m_drep"))+'<div class="dlab">Date</div></div></div>';
+ var lims=["This report documents a cleaning and antimicrobial treatment. Above & Beyond removed building materials only where stated; other removal was performed by others.",
+  "Work was performed on accessible, visible surfaces within the areas opened. Concealed areas not opened were not inspected or treated.",
+  "Above & Beyond performed no laboratory sampling on this project and makes no assessment conclusions.",
+  "No area is represented as free of mold on the basis of visual observation. A clean condition is established only by independent post-treatment verification, if elected.",
+  "Recurrence is likely if the underlying moisture source is not corrected by the responsible trade."];
+ var btm='<div class="btm"><div class="bc">'+sec("LIMITATIONS & EXCLUSIONS",bul(lims))+'</div>'
+   +'<div class="bc">'+sec("CONCLUSION",'<div class="body"><p>'+esc(V("m_concl"))+'</p></div>',"#17A2A8")+'</div>'
+   +'<div class="bc">'+sec("SIGNATURE",sig)+'</div></div>';
+ pages.push('<div class="page">'+headM()
+   +'<div class="baband" style="margin-bottom:3mm">'+esc(V("m_status"))+'</div>'
+   +'<div class="cols"><div class="lcol">'+left+'</div><div class="rcol">'+right+'</div></div>'+btm+'</div>');
+ for(var i=0;i<rest.length;i+=12){
+  var cells=rest.slice(i,i+12).map(function(p){return '<figure class="pf"><img src="'+p.src+'"><figcaption>'+esc(p.cap)+'</figcaption></figure>'}).join("");
+  pages.push('<div class="page">'+headM()+'<div class="baband">PHOTO DOCUMENTATION</div><div class="grid">'+cells+'</div></div>');
+ }
+ var ck=$("m_card").value, c=MR[ck]||MR.ab, L=[], tot=0;
+ function add(d,a){L.push([d,a]);tot+=a;}
+ var mt=Math.max(1,Math.round(N("m_t")||1)), mh=N("m_h"), th=mt*mh, sd=Math.round(N("m_scr"));
+ if(th>0) add("Mold treatment labour - scoping, protection, HEPA vacuuming, cleaning and antimicrobial application - "+mt+" technician"+(mt===1?"":"s")+", "+mh+" hour"+(mh===1?"":"s")+" on site ("+th+" technician hours)", th*c.l);
+ if(sd>0) add("HEPA air scrubber - one unit, "+sd+" day"+(sd===1?"":"s"), sd*94.66);
+ if($("m_demo")&&$("m_demo").checked){ add("Disposal of removed material and contaminated protection",220); add("Equipment decontamination following mold work",26.25); }
+ if($("m_cons")&&$("m_cons").checked) add("Antimicrobial, plastic sheeting, PPE and consumables",75);
+ var rn={ab:"", neal:"Neal: the $86.00 technician rate is from the Neal price list; Neal hires its own mold assessor. Confirm anything unusual before this goes out."};
+ if($("m_ratenote")) $("m_ratenote").innerHTML=rn[ck]||"";
+ var T=money(tot);
+ var body='<div class="baband">PRICING SUMMARY</div><div class="prwrap"><div class="prleft">'
+  +'<div class="body"><p>Priced to the '+esc(c.n)+' rate card. Labour hours are to be confirmed against technician timesheets.</p></div>'
+  +'<table class="btab"><thead><tr><th>Description</th><th class="amt">Amount</th></tr></thead><tbody>'
+  +L.map(function(x){return '<tr><td>'+esc(x[0])+'</td><td class="amt">'+money(x[1])+'</td></tr>'}).join("")
+  +'<tr class="tot"><td>TOTAL</td><td class="amt">'+T+'</td></tr></tbody></table>'
+  +'<div class="notes"><p>Not included: correction of the moisture source, which belongs to the responsible trade; reconstruction; and any independent clearance testing.</p>'
+  +(ck==="neal"?'<p>No service call, trip charge or travel time is billed on this job.</p>':'')
+  +'</div></div>'
+  +'<div class="prright"><div class="totbox"><div class="tl">TOTAL</div><div class="tv">'+T+'</div>'
+  +'<div class="tn">Cleaning and antimicrobial treatment.</div></div>'
+  +'<div class="inclbox"><div class="ib">WHAT THIS PRICE INCLUDES</div>'
+  +bul(["Containment and protection of the work area","HEPA vacuuming and cleaning of the affected surfaces","EPA-registered antimicrobial application","Photographic documentation and this report"])
+  +'</div></div></div>'
+  +'<div class="lic">Above &amp; Beyond Property Restoration &nbsp;|&nbsp; FL GC License CGC1535240 &nbsp;|&nbsp; Mold Remediator MRSR3802 &nbsp;|&nbsp; IICRC 57858351</div>';
+ pages.push('<div class="page">'+headM()+body+'</div>');
+ var n=pages.length;
+ $("rpt").innerHTML = pages.map(function(p,i){return p.slice(0,-6)+foot(i+1,n)+"</div>"}).join("");
+ fit();
+}
 var mode="stc";
-function render(){ if(mode==="wtr") renderWater(); else renderTruss(); }
+function render(){ if(mode==="wtr") renderWater(); else if(mode==="mld") renderMold(); else renderTruss(); }
 Array.prototype.forEach.call(document.querySelectorAll(".seg2 .sb"),function(b){
  b.addEventListener("click",function(){
   mode=b.getAttribute("data-m");
   Array.prototype.forEach.call(document.querySelectorAll(".seg2 .sb"),function(x){x.setAttribute("aria-pressed",String(x===b))});
-  $("form-stc").hidden=(mode!=="stc"); $("form-wtr").hidden=(mode!=="wtr");
+  $("form-stc").hidden=(mode!=="stc"); $("form-wtr").hidden=(mode!=="wtr"); $("form-mld").hidden=(mode!=="mld");
   render();
  });
 });
@@ -593,7 +720,7 @@ function fit(){
 window.addEventListener("resize",fit);
 
 function drawThumbs(){
- [$("thumbs"),$("thumbs2")].forEach(function(box){ if(box) fillThumbs(box); });
+ [$("thumbs"),$("thumbs2"),$("thumbs3")].forEach(function(box){ if(box) fillThumbs(box); });
 }
 function fillThumbs(box){
  box.innerHTML="";
@@ -664,7 +791,7 @@ function abApplyJob(job){
   var p=job.project||{}, tl=((job.timeline||[]).slice()).sort(function(a,b){return (a.id||0)-(b.id||0);});
   var name=p.name||""; abName=name; abPid=p.id||null;
   var suf=((name.match(/-([A-Za-z]{3})\s*$/)||[])[1]||"").toUpperCase();
-  var m=(suf==="WTR"||suf==="ESR")?"wtr":(suf==="STC")?"stc":"";
+  var m=(suf==="WTR"||suf==="ESR")?"wtr":(suf==="STC")?"stc":(suf==="MLD")?"mld":"";
   if(m){ var sb=document.querySelector('.seg2 .sb[data-m="'+m+'"]'); if(sb && sb.getAttribute("aria-pressed")!=="true") sb.click(); }
   var jn=((name.match(/(\d{2}-\d{4}-[A-Za-z]{3})/)||[])[1]||"").toUpperCase();
   var addr=p.address||name.replace(/-\s*\d{2}-\d{4}-[A-Za-z]{3}\s*$/,"").trim();
@@ -683,7 +810,7 @@ function abApplyJob(job){
   // force-set the identifying fields so a loaded job never keeps a sample default
   function abForce(id,val){ var el=$(id); if(el) el.value=(val==null?"":val); }
   var ids={addr:addr,city:city,job:jn,client:client,contact:contact,crew:crew,drep:today};
-  ["i_","w_"].forEach(function(px){ for(var kk in ids){ abForce(px+kk, ids[kk]); } });
+  ["i_","w_","m_"].forEach(function(px){ for(var kk in ids){ abForce(px+kk, ids[kk]); } });
   abForce("i_dwork",""); abForce("w_dol",""); abForce("w_resp","");
   // water: cause / areas from a structured field-estimator block, if one was posted
   var wc="", wa="", blk="";
@@ -694,7 +821,7 @@ function abApplyJob(job){
     if(cm){ wc=cm[1].trim(); if(wc.length>110) wc=wc.slice(0,110).replace(/\s+\S*$/,"")+"..."; }
     if(am){ wa=am[1].trim(); }
   }
-  abForce("w_cause", wc); abForce("w_areas", wa);
+  abForce("w_cause", wc); abForce("w_areas", wa); abForce("m_areas", wa);
   render();
   var note="Loaded "+name+".";
   if(!m && suf==="MLD") note+=" Mold report mode isn't in the builder yet - pick Truss or Water; the job details are filled in both.";
