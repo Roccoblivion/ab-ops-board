@@ -175,6 +175,16 @@ h1{font-size:20px;margin:0}.mut{color:var(--mut);font-size:12px}
 
 <div class="shell">
   <div class="noprint">
+  <div class="card" style="border:1px solid var(--t)">
+    <h2 style="color:var(--t)">Load from Albi</h2>
+    <div class="f"><label>Job number or address</label>
+      <input id="albijob" placeholder="e.g. 26-0299-WTR   or   Owen Preserve"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="loadjob" type="button">Load job</button>
+      <button class="btn ghost" id="loadphotos" type="button">Get photos from Albi</button>
+    </div>
+    <div class="mut" id="albistatus" style="margin-top:9px;line-height:1.45">Pulls the job details and CompanyCam photos so you don't retype them or download photos by hand. It fills the top of the form and sets the report type — you still write the narrative and check every field.</div>
+  </div>
   <div id="form-stc">
     <div class="hintbox">Write what actually happened. If the note says sprayed, write treated — not cleaned. Never enter a reading, an hour count or a date you do not have.</div>
 
@@ -631,6 +641,90 @@ document.addEventListener("input",function(ev){
  if(ev.target && ev.target.closest && ev.target.closest(".thumbs")) return;
  render();
 });
+// ===== Load from Albi: job details + CompanyCam photos =====
+var abPid=null, abName="";
+function abStat(s){ var e=$("albistatus"); if(e) e.textContent=s; }
+function abSet(id,val){ var el=$(id); if(el && val!=null && String(val).trim()!=="") el.value=val; }
+function abLoadJob(){
+  var q=($("albijob").value||"").trim();
+  if(!q){ abStat("Type a job number or address first."); return; }
+  abStat('Loading "'+q+'" from Albi...');
+  fetch("https://ops.goaboveandbeyond.us/webhook/job-pull?q="+encodeURIComponent(q))
+   .then(function(r){return r.json();})
+   .then(function(j){
+     var jobs=(j&&j.jobs)||[];
+     if(!jobs.length){ abStat('No open job found for "'+q+'".'); return; }
+     var job=jobs[0];
+     for(var k=0;k<jobs.length;k++){ var nm=(jobs[k].project&&jobs[k].project.name)||""; if(nm.toLowerCase().indexOf(q.toLowerCase())>=0){ job=jobs[k]; break; } }
+     abApplyJob(job);
+   })
+   .catch(function(e){ abStat("Could not reach Albi. "+e); });
+}
+function abApplyJob(job){
+  var p=job.project||{}, tl=((job.timeline||[]).slice()).sort(function(a,b){return (a.id||0)-(b.id||0);});
+  var name=p.name||""; abName=name; abPid=p.id||null;
+  var suf=((name.match(/-([A-Za-z]{3})\s*$/)||[])[1]||"").toUpperCase();
+  var m=(suf==="WTR"||suf==="ESR")?"wtr":(suf==="STC")?"stc":"";
+  if(m){ var sb=document.querySelector('.seg2 .sb[data-m="'+m+'"]'); if(sb && sb.getAttribute("aria-pressed")!=="true") sb.click(); }
+  var jn=((name.match(/(\d{2}-\d{4}-[A-Za-z]{3})/)||[])[1]||"").toUpperCase();
+  var addr=p.address||name.replace(/-\s*\d{2}-\d{4}-[A-Za-z]{3}\s*$/,"").trim();
+  var city=p.city?(p.city+", FL"):"";
+  var client=p.org||p.customerName||"";
+  var crew="";
+  for(var i=tl.length-1;i>=0;i--){ if(tl[i].type==="scheduler_event"){ var mm=(tl[i].message||"").match(/attendees?\s+(.+?)\s*$/i); if(mm){ crew=mm[1].replace(/\s+/g," ").replace(/\.$/,"").trim(); break; } } }
+  var today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+  var vals={addr:addr,city:city,job:jn,client:client,crew:crew,drep:today};
+  ["i_","w_"].forEach(function(px){ for(var kk in vals){ abSet(px+kk, vals[kk]); } });
+  // water-only: cause / areas from a structured field-estimator block, if one was posted
+  var blk=""; for(var b2=tl.length-1;b2>=0;b2--){ var msg=tl[b2].message||""; if(/Cause\s*\/\s*what happened/i.test(msg)){ blk=msg; break; } }
+  if(blk){
+    var cm=blk.match(/Cause\s*\/\s*what happened\s*:?\s*([^\n]+)/i);
+    var am=blk.match(/Rooms\s*\/\s*areas affected\s*:?\s*([^\n]+)/i);
+    if(cm){ var cz=cm[1].trim(); if(cz.length>110) cz=cz.slice(0,110).replace(/\s+\S*$/,"")+"..."; abSet("w_cause", cz); }
+    if(am){ abSet("w_areas", am[1].trim()); }
+  }
+  render();
+  var note="Loaded "+name+".";
+  if(!m && suf==="MLD") note+=" Mold report mode isn't in the builder yet - pick Truss or Water; the job details are filled in both.";
+  note+=" Review every field and write the narrative from the field notes - nothing here is final.";
+  abStat(note);
+}
+function abLoadPhotos(){
+  if(!abPid){ abStat("Load the job first, then get its photos."); return; }
+  abStat("Fetching the photo list for "+abName+"...");
+  fetch("https://ops.goaboveandbeyond.us/webhook/albi-probe?pid="+encodeURIComponent(abPid))
+   .then(function(r){return r.json();})
+   .then(function(j){
+     var files=(j.files||[]).filter(function(f){return /^image\//.test(f.type||"");});
+     var cc=files.filter(function(f){return /companycam/i.test(f.name);});
+     var use=cc.length?cc:files;
+     if(!use.length){ abStat("No photos on this job in Albi yet."); return; }
+     abStat("Loading "+use.length+" photo"+(use.length===1?"":"s")+" from Albi...");
+     var left=use.length, added=0;
+     use.forEach(function(f){
+       fetch(f.uri).then(function(r){return r.blob();}).then(function(blob){
+         var url=URL.createObjectURL(blob); var img=new Image();
+         img.onload=function(){
+           try{
+             var max=1200,w=img.width,h=img.height; if(w>max){h=Math.round(h*max/w);w=max;}
+             var c=document.createElement("canvas");c.width=w;c.height=h;
+             c.getContext("2d").drawImage(img,0,0,w,h);
+             photos.push({src:c.toDataURL("image/jpeg",0.82),cap:""}); added++;
+           }catch(e){}
+           URL.revokeObjectURL(url);
+           if(--left===0){ drawThumbs(); render(); abStat("Added "+added+" photo"+(added===1?"":"s")+" from Albi. Remove any you don't want and add captions."); }
+         };
+         img.onerror=function(){ URL.revokeObjectURL(url); if(--left===0){ drawThumbs(); render(); abStat("Added "+added+" photo"+(added===1?"":"s")+" from Albi."); } };
+         img.src=url;
+       }).catch(function(){ if(--left===0){ drawThumbs(); render(); abStat("Added "+added+" photo"+(added===1?"":"s")+" from Albi."); } });
+     });
+   })
+   .catch(function(e){ abStat("Could not fetch photos. "+e); });
+}
+$("loadjob").addEventListener("click", abLoadJob);
+$("loadphotos").addEventListener("click", abLoadPhotos);
+$("albijob").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); abLoadJob(); } });
+
 drawThumbs(); render();
 })();
 </script></body></html>
