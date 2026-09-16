@@ -839,7 +839,12 @@ function abLoadPhotos(){
      var use=cc.length?cc:files;
      if(!use.length){ abStat("No photos on this job in Albi yet."); return; }
      abStat("Loading "+use.length+" photo"+(use.length===1?"":"s")+" from Albi...");
-     var left=use.length, added=0;
+     var left=use.length, added=0, N=use.length;
+     function done(){ if(--left>0) return; drawThumbs(); render();
+       if(added===0) abStat("Couldn't pull these "+N+" photo"+(N===1?"":"s")+" into the browser - they're stored directly in Albi, not CompanyCam. Open them from the Albi file manager and use Add photos.");
+       else if(added<N) abStat("Added "+added+" of "+N+" photos. The other "+(N-added)+" are stored directly in Albi (not CompanyCam) and can't be pulled here - add those by hand with Add photos.");
+       else abStat("Added "+added+" photo"+(added===1?"":"s")+" from Albi. Remove any you don't want and add captions.");
+     }
      use.forEach(function(f){
        fetch(f.uri).then(function(r){return r.blob();}).then(function(blob){
          var url=URL.createObjectURL(blob); var img=new Image();
@@ -850,12 +855,11 @@ function abLoadPhotos(){
              c.getContext("2d").drawImage(img,0,0,w,h);
              photos.push({src:c.toDataURL("image/jpeg",0.82),cap:""}); added++;
            }catch(e){}
-           URL.revokeObjectURL(url);
-           if(--left===0){ drawThumbs(); render(); abStat("Added "+added+" photo"+(added===1?"":"s")+" from Albi. Remove any you don't want and add captions."); }
+           URL.revokeObjectURL(url); done();
          };
-         img.onerror=function(){ URL.revokeObjectURL(url); if(--left===0){ drawThumbs(); render(); abStat("Added "+added+" photo"+(added===1?"":"s")+" from Albi."); } };
+         img.onerror=function(){ URL.revokeObjectURL(url); done(); };
          img.src=url;
-       }).catch(function(){ if(--left===0){ drawThumbs(); render(); abStat("Added "+added+" photo"+(added===1?"":"s")+" from Albi."); } });
+       }).catch(function(){ done(); });
      });
    })
    .catch(function(e){ abStat("Could not fetch photos. "+e); });
