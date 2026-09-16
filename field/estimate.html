@@ -55,7 +55,7 @@ textarea{min-height:74px;resize:vertical}
 <header>
   <button class="back hidden" id="back" onclick="home()">‹ Back</button>
   <div class="brand">A&amp;B Field Estimator</div>
-  <div class="sub" id="hsub">Price truss &amp; small mold on the spot. Bigger jobs go to the office.</div>
+  <div class="sub" id="hsub">Price truss, mold &amp; water on the spot. Big jobs still get a second look.</div>
 </header>
 
 <div class="wrap">
@@ -67,10 +67,10 @@ textarea{min-height:74px;resize:vertical}
       <div class="pick">
         <div class="opt" onclick="go('truss')"><div><div class="t">Truss cleaning</div><div class="d">Flat price by how much of the attic — you can quote it here.</div></div></div>
         <div class="opt" onclick="go('mold')"><div><div class="t">Small mold treatment</div><div class="d">Single visit, under 10 sq ft — you can price it here.</div></div></div>
-        <div class="opt" onclick="go('cap')"><div><div class="t">Water, or a larger mold job</div><div class="d">Capture the scope &amp; photos — the office prices and sends it.</div></div></div>
+        <div class="opt" onclick="go('cap')"><div><div class="t">Water, or a larger mold job</div><div class="d">Get a projected price and capture the scope for the office.</div></div></div>
       </div>
     </div>
-    <div class="note">Truss and small-mold prices here are ready for the office to issue. Anything with measurements, drying, or removal goes to the office so a second set of eyes prices it. Hours always confirm against timesheets — don't guess readings.</div>
+    <div class="note">Truss and small-mold prices here are ready for the office to issue. Water gives a projected number on the days you enter — the office confirms it against the drying log and timesheets before it goes out. Anything over $2,500 goes to Jacob first. Confirm crew size and hours against timesheets — don't guess readings.</div>
   </div>
 
   <!-- TRUSS -->
@@ -108,11 +108,47 @@ textarea{min-height:74px;resize:vertical}
     <div id="mOut"></div>
   </div>
 
-  <!-- CAPTURE -->
+  <!-- WATER / LARGER -->
   <div id="cap" class="hidden">
     <div class="card">
-      <h2>Send the scope to the office <span class="pill">draft</span></h2>
-      <div class="note">This does not make a client price. It builds a clean scope the office prices and sends. Fill what you know — leave the rest.</div>
+      <h2>Water job — price it</h2>
+      <div class="note">Projected price on A&amp;B water rates. Drying days are your best estimate — the final bill follows the drying log and timesheets. Over $2,500 goes to Jacob before the client sees it.</div>
+
+      <label>Water extracted — sq ft <span style="font-weight:400;color:var(--mut)">(0 if none)</span></label>
+      <input id="wSqft" type="number" inputmode="numeric" value="0" min="0" step="25">
+
+      <label>Dehumidifiers</label>
+      <div class="num"><button onclick="step('wDehu',-1)">–</button><input id="wDehu" type="number" inputmode="numeric" value="0" min="0"><button onclick="step('wDehu',1)">+</button></div>
+
+      <label>Air movers</label>
+      <div class="num"><button onclick="step('wAir',-1)">–</button><input id="wAir" type="number" inputmode="numeric" value="0" min="0"><button onclick="step('wAir',1)">+</button></div>
+
+      <label>Air scrubbers</label>
+      <div class="num"><button onclick="step('wScr',-1)">–</button><input id="wScr" type="number" inputmode="numeric" value="0" min="0"><button onclick="step('wScr',1)">+</button></div>
+
+      <label>Drying days — equipment on site</label>
+      <div class="num"><button onclick="step('wDays',-1)">–</button><input id="wDays" type="number" inputmode="numeric" value="3" min="1"><button onclick="step('wDays',1)">+</button></div>
+
+      <label>Technicians on the setup / extraction visit</label>
+      <div class="num"><button onclick="step('wTech',-1)">–</button><input id="wTech" type="number" inputmode="numeric" value="2" min="0"><button onclick="step('wTech',1)">+</button></div>
+
+      <label>Hours that visit (per tech)</label>
+      <div class="num"><button onclick="step('wHrs',-0.5)">–</button><input id="wHrs" type="number" inputmode="decimal" value="2" min="0" step="0.5"><button onclick="step('wHrs',0.5)">+</button></div>
+
+      <label>Daily monitoring visits</label>
+      <div class="num"><button onclick="step('wMon',-1)">–</button><input id="wMon" type="number" inputmode="numeric" value="2" min="0"><button onclick="step('wMon',1)">+</button></div>
+
+      <div class="chk" style="margin-top:12px"><input type="checkbox" id="wSetup" checked><div><div class="cx">Equipment setup &amp; takedown ($275.63)</div><div class="cd">Placing and pulling the equipment. Leave on for a normal job.</div></div></div>
+      <div class="chk"><input type="checkbox" id="wCons" checked><div><div class="cx">Consumables ($75)</div><div class="cd">Poly, tape, PPE, filters.</div></div></div>
+      <div class="chk"><input type="checkbox" id="wDemo"><div><div class="cx">Removed wet material</div><div class="cd">Adds debris disposal ($220) and decon below.</div></div></div>
+
+      <label>Items to decontaminate <span style="font-weight:400;color:var(--mut)">(only if material was removed)</span></label>
+      <div class="num"><button onclick="step('wDecon',-1)">–</button><input id="wDecon" type="number" inputmode="numeric" value="0" min="0"><button onclick="step('wDecon',1)">+</button></div>
+    </div>
+
+    <div class="card">
+      <h2>Scope for the office <span class="pill">write-up</span></h2>
+      <div class="note">The number above is the price. These notes give the office what it needs to write the estimate and the report. Fill what you know — leave the rest.</div>
       <label>Job / address</label><input id="cAddr" placeholder="e.g. 123 Main St, Palmetto">
       <label>Client / builder</label><input id="cClient" placeholder="e.g. Taylor Morrison, homeowner name">
       <label>Type</label>
@@ -120,10 +156,9 @@ textarea{min-height:74px;resize:vertical}
       <label>What happened / suspected cause</label><textarea id="cCause" placeholder="e.g. supply line leak under sink; growth on drywall; AC condensation"></textarea>
       <label>Rooms / areas affected</label><textarea id="cAreas" placeholder="e.g. kitchen, hall, 2 bedrooms — wet drywall bottom 2 ft, wet carpet"></textarea>
       <label>Materials affected</label><input id="cMat" placeholder="drywall, baseboard, carpet, insulation…">
-      <label>Equipment placed (if any)</label><input id="cEquip" placeholder="e.g. 3 air movers, 1 dehu, 2 scrubbers">
       <label>Readings taken</label><input id="cRead" placeholder="only what you actually measured — no guesses">
       <label>Anything else the office needs</label><textarea id="cNotes" placeholder="access, contents, who to contact, next visit…"></textarea>
-      <button class="btn teal" onclick="calcCap()">Build the scope for the office</button>
+      <button class="btn teal" onclick="calcCap()">Price it &amp; build the scope</button>
     </div>
     <div id="cOut"></div>
   </div>
@@ -146,8 +181,8 @@ function money(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,m
 function money0(n){return '$'+Math.round(n).toLocaleString('en-US');}
 function today(){var d=new Date();return (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear();}
 function show(id){['home','truss','mold','cap'].forEach(function(x){$(x).classList.toggle('hidden',x!==id);});$('back').classList.toggle('hidden',id==='home');window.scrollTo(0,0);}
-function home(){show('home');$('hsub').textContent='Price truss & small mold on the spot. Bigger jobs go to the office.';}
-function go(id){show(id);if(id==='truss')renderTiers();if(id==='truss')$('hsub').textContent='Pick the tier by what you see — not by hours.';if(id==='mold')$('hsub').textContent='Single visit, under 10 sq ft.';if(id==='cap')$('hsub').textContent='Capture the job for the office to price.';}
+function home(){show('home');$('hsub').textContent='Price truss, mold & water on the spot. Big jobs still get a second look.';}
+function go(id){show(id);if(id==='truss')renderTiers();if(id==='truss')$('hsub').textContent='Pick the tier by what you see — not by hours.';if(id==='mold')$('hsub').textContent='Single visit, under 10 sq ft.';if(id==='cap')$('hsub').textContent='Projected water price on A&B rates — the office confirms it.';}
 function renderTiers(){$('tTier').innerHTML=TIERS.map(function(t){return '<label class="opt" id="ot_'+t.k+'"><input type="radio" name="tier" value="'+t.k+'" onchange="pickTier(\''+t.k+'\')"><div><div class="t">'+t.t+' — '+money0(t.p)+'</div><div class="d">'+t.d+'</div></div></label>';}).join('');}
 function pickTier(k){sel=k;TIERS.forEach(function(t){$('ot_'+t.k).classList.toggle('sel',t.k===k);});}
 function step(id,by){var el=$(id);var v=parseFloat(el.value||'0')+by;var min=parseFloat(el.min||'0');if(v<min)v=min;el.value=(v%1===0)?v:v.toFixed(1);}
@@ -207,21 +242,48 @@ function calcMold(){
 
 function calcCap(){
  function g(id){return ($(id).value||'').trim();}
- var b='SCOPE FOR OFFICE PRICING — NOT A CLIENT PRICE\nCaptured in the field '+today()+'\n\n';
+ function n(id){return Math.max(0,parseFloat($(id).value||'0'));}
+ // A&B water rate card
+ var WLAB=94.50,WDEHU=174.58,WAIR=46.08,WSCR=94.66,WSET=275.63,WMON=99.75,WEXT=0.34,WCONS=75,WDISP=220,WDEC=26.25;
+ var sqft=n('wSqft'),dehu=n('wDehu'),air=n('wAir'),scr=n('wScr'),days=Math.max(1,n('wDays'));
+ var tech=n('wTech'),hrs=n('wHrs'),mon=n('wMon'),decon=n('wDecon');
+ var setup=$('wSetup').checked,cons=$('wCons').checked,demo=$('wDemo').checked;
+ var items=[];
+ if(sqft>0) items.push(['Water extraction — '+sqft+' sq ft @ $0.34/sq ft', sqft*WEXT]);
+ if(setup) items.push(['Equipment setup, adjustment & takedown', WSET]);
+ if(dehu>0) items.push(['Dehumidifier'+(dehu>1?'s':'')+' — '+dehu+' × '+days+' day'+(days>1?'s':'')+' @ $174.58/day', dehu*days*WDEHU]);
+ if(air>0) items.push(['Air mover'+(air>1?'s':'')+' — '+air+' × '+days+' day'+(days>1?'s':'')+' @ $46.08/day', air*days*WAIR]);
+ if(scr>0) items.push(['HEPA air scrubber'+(scr>1?'s':'')+' — '+scr+' × '+days+' day'+(days>1?'s':'')+' @ $94.66/day', scr*days*WSCR]);
+ var th=tech*hrs;
+ if(th>0) items.push(['Labor — '+tech+' tech'+(tech>1?'s':'')+' × '+hrs+' hr, setup/extraction visit ('+th+' tech-hrs) @ $94.50/hr', th*WLAB]);
+ if(mon>0) items.push(['Daily monitoring — '+mon+' visit'+(mon>1?'s':'')+' @ $99.75', mon*WMON]);
+ if(cons) items.push(['Consumables (poly, PPE, filters)', WCONS]);
+ if(demo) items.push(['Debris disposal', WDISP]);
+ if(demo&&decon>0) items.push(['Contents / equipment decontamination — '+decon+' item'+(decon>1?'s':'')+' @ $26.25', decon*WDEC]);
+ var total=items.reduce(function(s,x){return s+x[1];},0);
+ if(total<=0){$('cOut').innerHTML='<div class="flag warn">Enter the equipment, extraction or labor to get a price. If there is nothing to price yet, just fill the scope below and send it to the office.</div>';return;}
+ var b='ESTIMATE — for the office to issue (projected field price)\nWater mitigation\nDate '+today()+'\n\n';
+ items.forEach(function(x){ b+='• '+x[0]+' — '+money(x[1])+'\n'; });
+ b+='\nPROJECTED TOTAL: '+money(total)+'\n';
+ b+='\n— SCOPE —\n';
  b+='Job / address: '+(g('cAddr')||'—')+'\n';
  b+='Client / builder: '+(g('cClient')||'—')+'\n';
  b+='Type: '+$('cType').value+'\n';
  b+='Cause / what happened: '+(g('cCause')||'—')+'\n';
  b+='Rooms / areas affected: '+(g('cAreas')||'—')+'\n';
  b+='Materials affected: '+(g('cMat')||'—')+'\n';
- b+='Equipment placed: '+(g('cEquip')||'—')+'\n';
  b+='Readings taken: '+(g('cRead')||'none recorded')+'\n';
  b+='Notes: '+(g('cNotes')||'—')+'\n';
- b+='\nOffice: price on the right rate card, confirm crew size from the scheduler attendees, hours against timesheets. Attach the CompanyCam photos.';
- $('cOut').innerHTML='<div class="flag ok">Scope built. Copy it into the crew chat or text it to the office, and make sure your CompanyCam photos are on the job.</div>'+
-   '<div class="card"><h2>Send to the office</h2><div class="out">'+b.replace(/</g,'&lt;')+'</div><button class="btn teal" id="ccopy" onclick=\'copyBox("ccopy",'+JSON.stringify(b)+')\'>Copy for the office</button></div>';
+ b+='\nProjected on '+days+' drying day'+(days>1?'s':'')+' — confirm against the drying log. Crew size and hours confirm against timesheets. Client copy shows description and total, no unit rates. No mold-free claims. Attach the CompanyCam photos.';
+ var flags='';
+ if(total>2500) flags+='<div class="flag bad">Over $2,500 — this goes to Jacob before it goes to the client.</div>';
+ flags+='<div class="flag warn">Projected number. Water dries when it dries — the office confirms the day count against the drying log and the hours against timesheets before this goes out.</div>';
+ if(dehu===0 && (air>0||scr>0)) flags+='<div class="flag warn">No dehumidifier entered. Make sure the space can actually dry (a drain, or an open building) — if it can\'t, add one.</div>';
+ $('cOut').innerHTML='<div class="big"><div class="amt">'+money0(total)+'</div><div class="cap">Water — projected, for the office to issue</div></div>'+flags+
+   '<div class="card"><h2>Send to the office</h2><div class="out">'+b.replace(/</g,'&lt;')+'</div><button class="btn teal" id="ccopy">Copy for the office</button></div>';
+ $('ccopy').onclick=function(){copyBox('ccopy',b);};
 }
-$('ver').textContent='v1 · '+today();
+$('ver').textContent='v2 · '+today();
 </script>
 </body>
 </html>
