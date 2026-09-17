@@ -1,0 +1,121 @@
+{
+ "asOf": "2026-09-16T12:00:00Z",
+ "asOfLabel": "9/16 baseline (hand-validated)",
+ "auto": false,
+ "window": "rolling 30 days",
+ "boxes": [
+  "rest@goaboveandbeyond.us",
+  "cons@goaboveandbeyond.us"
+ ],
+ "metric": "New-job first email response (Metric 1)",
+ "overall": {
+  "count": 13,
+  "medianMin": 56,
+  "within60": 7,
+  "within60Pct": 54,
+  "bestMin": 15,
+  "worstMin": 194
+ },
+ "builders": [
+  {
+   "name": "Neal",
+   "kept": 5,
+   "total": 7,
+   "medianMin": 50
+  },
+  {
+   "name": "Taylor Morrison",
+   "kept": 1,
+   "total": 4,
+   "medianMin": 85
+  },
+  {
+   "name": "Pulte",
+   "kept": 1,
+   "total": 2,
+   "medianMin": 90
+  }
+ ],
+ "items": [
+  {
+   "job": "8070 Anthirium (WO 11002)",
+   "acct": "Neal",
+   "min": 15,
+   "kept": true
+  },
+  {
+   "job": "8067 Anthirium (WO 09845)",
+   "acct": "Neal",
+   "min": 32,
+   "kept": true
+  },
+  {
+   "job": "755 Balleby / Reagan Landing",
+   "acct": "Pulte",
+   "min": 34,
+   "kept": true
+  },
+  {
+   "job": "15265 Contenta / Azario 6082",
+   "acct": "Taylor Morrison",
+   "min": 35,
+   "kept": true
+  },
+  {
+   "job": "2246 Lady Palm (WO 10954)",
+   "acct": "Neal",
+   "min": 38,
+   "kept": true
+  },
+  {
+   "job": "2803 Butterfly Jasmine (WO 10260)",
+   "acct": "Neal",
+   "min": 50,
+   "kept": true
+  },
+  {
+   "job": "8132 Anthirium (WO 10046)",
+   "acct": "Neal",
+   "min": 56,
+   "kept": true
+  },
+  {
+   "job": "718 Steel Dr / Indigo Creek 83",
+   "acct": "Taylor Morrison",
+   "min": 82,
+   "kept": false
+  },
+  {
+   "job": "16430 Paynes Mill (create a plan)",
+   "acct": "Taylor Morrison",
+   "min": 88,
+   "kept": false
+  },
+  {
+   "job": "2448 Star Apple (WO 10025)",
+   "acct": "Neal",
+   "min": 129,
+   "kept": false
+  },
+  {
+   "job": "2532 Star Apple (WO 09787)",
+   "acct": "Neal",
+   "min": 132,
+   "kept": false
+  },
+  {
+   "job": "6236 Grande Talon",
+   "acct": "Pulte",
+   "min": 145,
+   "kept": false
+  },
+  {
+   "job": "10852 Eclipse (Remediation Request)",
+   "acct": "Taylor Morrison",
+   "min": 194,
+   "kept": false
+  }
+ ],
+ "openItems": [],
+ "note": "New-job first email response, business-hours clock (Mon-Fri 8-5 ET). Email time is a floor - some misses were handled same day by phone. This 9/16 baseline is hand-validated; the board refreshes it daily going forward (auto-computed - spot-check before acting on a single number)."
+}
