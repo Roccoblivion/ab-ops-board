@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-# v2.1 (9/17/2026) - "New request received -> first acknowledgment sent" for rest@ + cons@.
+# v2.2 (9/17/2026) - "New request received -> first acknowledgment sent" for rest@ + cons@.
 # v2.1: threads are keyed on the job number in the subject (Neal WO no., TM BuildPro order no.) because
 #       our staff append the Albi job number to the subject when they reply, and Neal adds [EXT] tags;
 #       full-subject matching missed real acknowledgments and counted mid-thread replies as new requests.
+# v2.2: the office often acknowledges with a NEW email titled '<address>-<Albi job no>' instead of replying on the
+#       client's thread. When a thread has no reply at all, fall back to the first later outbound whose subject carries
+#       the same house number + street word (validated on real rest@ mail 9/17: Big Bayou 6560, Grande Talon 6236).
 # John's definition: the timer starts when the client's email instruction lands in our box
 # and stops when our first email acknowledgment goes back to the client.
 #
@@ -97,6 +100,10 @@ NEWJOB=re.compile(r'\bwo\b|\bwar\b|warranty task|\(wo\)|buildpro|remediation req
 # standard first line of our acknowledgment templates (kept narrow on purpose)
 ACK_MARK=re.compile(r'received your (request|instruction|instructions|work order|email)|confirming receipt', re.I)
 
+ADDR=re.compile(r'(?<!\d)(\d{3,5}),?\s+([a-z]{3,})')
+def addr_tokens(subj):
+    return set((a,b) for a,b in ADDR.findall(norm(subj)) if b not in ('lot','spots','homes','days'))
+
 def is_opener_subject(subj):
     return bool(NEWJOB.search(subj or ''))
 
@@ -114,6 +121,8 @@ def compute(inbound, sent, now_iso):
     for m in sent:
         sent_idx.setdefault(thread_key(m.get('subject')),[]).append((m['sent'], m.get('box'), m.get('summary') or ''))
     for k in sent_idx: sent_idx[k].sort(key=lambda t:parse(t[0]))
+    sent_addr=[(m['sent'],m.get('box'),m.get('summary') or '',addr_tokens(m.get('subject'))) for m in sent]
+    sent_addr=[t for t in sent_addr if t[3]]
     def replies_for(k):
         if k.startswith('n:'): return sent_idx.get(k,[])
         # subject key: we often append the Albi job number, so accept replies whose subject STARTS with the opener subject
@@ -137,10 +146,17 @@ def compute(inbound, sent, now_iso):
     items=[]; openitems=[]
     for k,o in first.items():
         if o['reply_first']: continue   # thread started before the window or outside these senders - not a new request
-        reply=None
+        reply=None; how='thread'
         for st,box,summ in replies_for(k):
             if parse(st)>parse(o['received']):
                 reply=(st,box,summ); break
+        if reply is None:
+            toks=addr_tokens(o['subject'])
+            if toks:
+                lim=parse(o['received'])+timedelta(days=14)
+                cand=[t for t in sent_addr if t[3]&toks and parse(o['received'])<parse(t[0])<=lim]
+                if cand:
+                    c=min(cand,key=lambda t:parse(t[0])); reply=(c[0],c[1],c[2]); how='address'
         keyword=is_opener_subject(o['subject'])
         template=bool(reply and ACK_MARK.search(reply[2]))
         if not (keyword or template): continue      # not a recognisable new request
@@ -150,7 +166,7 @@ def compute(inbound, sent, now_iso):
         if reply:
             mins=biz_minutes(o['received'],reply[0]); raw=raw_minutes(o['received'],reply[0])
             base.update({'acked':reply[0],'ackedLabel':label(reply[0]),'min':mins,'rawMin':raw,
-                         'kept':mins<=60,'keptRaw':raw<=60,'via':'template' if template else 'keyword'})
+                         'kept':mins<=60,'keptRaw':raw<=60,'via':'template' if template else 'keyword','matched':how})
             items.append(base)
         else:
             base.update({'waitMin':biz_minutes(o['received'],now_iso),'rawWaitMin':raw_minutes(o['received'],now_iso)})
@@ -167,7 +183,7 @@ def agg(items):
             'bestMin':min(vals),'worstMin':max(vals),
             'within60Raw':sum(1 for v in raws if v<=60),'medianRawMin':round(statistics.median(raws))}
 
-def build(items, openitems, now_iso, lbl, auto=True):
+def build(items, openitems, now_iso, lbl, auto=True, boxes=None):
     order=['Neal','Taylor Morrison','Pulte']
     accts=order+sorted({i['acct'] for i in items}-set(order))
     builders=[]
@@ -182,18 +198,19 @@ def build(items, openitems, now_iso, lbl, auto=True):
                            for i in sorted(wk,key=lambda x:-x['min']) if not i['kept']],
                  'open':[o for o in openitems if parse(o['received'])>=cut]})
     return {'asOf':now_iso,'asOfLabel':lbl,'auto':auto,'schema':2,'window':'rolling 30 days',
-            'boxes':['rest@goaboveandbeyond.us','cons@goaboveandbeyond.us'],
-            'metric':'New request received to first acknowledgment sent','scriptVersion':'2.1',
+            'boxes':boxes or ['rest@goaboveandbeyond.us','cons@goaboveandbeyond.us'],
+            'metric':'New request received to first acknowledgment sent','scriptVersion':'2.2',
             'overall':agg(items),'week':week,'builders':builders,
             'items':sorted(items,key=lambda x:x['min']),
             'openItems':sorted(openitems,key=lambda x:-x['waitMin']),
-            'note':'Clock starts when the client email lands in rest@ or cons@ and stops at our first email acknowledgment. Business-hours minutes (Mon-Fri 8-5 ET) decide kept/missed; raw minutes are shown too. A phone call does not stop the clock - only an email reply does. Auto-computed daily - spot-check before acting on a single number.'}
+            'note':'Clock starts when the client email lands in rest@ or cons@ and stops at our first email acknowledgment. Business-hours minutes (Mon-Fri 8-5 ET) decide kept/missed; raw minutes are shown too. A phone call does not stop the clock - only an email reply does. Counts requests the tracker can recognise: work-order / EPO / remediation-request style subjects, or any thread where our first reply says we are confirming receipt. Plain-subject requests answered without that line are not counted yet. Auto-computed - spot-check before acting on a single number.'}
 
 if __name__=='__main__':
     inbound=json.load(open('inbound.json')); sent=json.load(open('sent.json'))
     now_iso=sys.argv[1] if len(sys.argv)>1 else datetime.now(timezone.utc).isoformat()
     items,openitems=compute(inbound,sent,now_iso)
-    data=build(items,openitems,now_iso,datetime.now(ET).strftime('%-m/%-d %-I:%M%p ET').lower())
+    boxes=sorted({m.get('box') for m in inbound if isinstance(m,dict) and m.get('box')})
+    data=build(items,openitems,now_iso,datetime.now(ET).strftime('%-m/%-d %-I:%M%p ET').lower(),boxes=boxes)
     json.dump(data,open('email-response.json','w'),indent=1)
     print('GUARD count=%d'%data['overall']['count'])
     print(json.dumps(data['overall']))
