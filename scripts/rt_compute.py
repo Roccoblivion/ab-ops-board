@@ -1,9 +1,22 @@
 #!/usr/bin/env python3
-# Computes "new-job first email response" (Metric 1) for rest@ + cons@ shared boxes.
-# INPUT:  inbound.json = [{box,subject,sender,received}]  (builder-domain inbound, 30d)
-#         sent.json    = [{box,subject,sender,sent}]      (box Sent Items, 30d)
-# OUTPUT: email-response.json  (same schema the board card reads)
-import json, re, sys, statistics, base64
+# v2 (9/17/2026) - "New request received -> first acknowledgment sent" for rest@ + cons@.
+# John's definition: the timer starts when the client's email instruction lands in our box
+# and stops when our first email acknowledgment goes back to the client.
+#
+# INPUT:  inbound.json = [{box,subject,sender,received}]          (VIP-domain inbound, 30d)
+#         sent.json    = [{box,subject,sender,sent,summary?}]     (box Sent Items, 30d)
+# OUTPUT: email-response.json  (board card schema; v2 only ADDS fields, nothing removed)
+#
+# What v2 adds over v1:
+#   - every item carries the actual received / acknowledged timestamps (ISO + ET label)
+#   - raw wall-clock minutes (rawMin) next to business-hours minutes (min)
+#   - a "week" block: requests received in the last 7 days, kept/missed, named misses
+#   - one request copied to BOTH rest@ and cons@ is counted once; an acknowledgment from
+#     either box stops the clock (v1 counted per box, which could show a false miss)
+#   - acknowledgment-template detection: if our first reply opens with the standard line
+#     ("...received your request..."), the thread counts as a new request even when the
+#     client's subject has no keyword (closes the Taylor Morrison plain-address gap)
+import json, re, sys, statistics
 from datetime import datetime, timedelta, timezone
 try:
     from zoneinfo import ZoneInfo; ET=ZoneInfo("America/New_York")
@@ -29,6 +42,16 @@ def biz_minutes(a_iso,b_iso):
             if e>s: total+=(e-s).total_seconds()/60.0
         cur=(cur+timedelta(days=1)).replace(hour=0,minute=0,second=0,microsecond=0)
     return round(total)
+def raw_minutes(a_iso,b_iso):
+    d=(parse(b_iso)-parse(a_iso)).total_seconds()/60.0
+    return max(0,round(d))
+def in_hours(iso):
+    d=parse(iso)
+    return d.weekday()<5 and OPEN_H<=d.hour<CLOSE_H
+def label(iso):
+    d=parse(iso)
+    h=d.hour%12 or 12
+    return '%s %d/%d %d:%02d%s' % (d.strftime('%a'), d.month, d.day, h, d.minute, 'am' if d.hour<12 else 'pm')
 
 def norm(subj):
     s=subj or ""
@@ -39,7 +62,10 @@ def norm(subj):
     return re.sub(r'\s+',' ',s).strip().lower()
 
 DOMAINS={'taylormorrison.com':'Taylor Morrison','nealcommunities.com':'Neal',
-         'pulte.com':'Pulte','pultegroup.com':'Pulte'}
+         'pulte.com':'Pulte','pultegroup.com':'Pulte',
+         # attribution only - these count once their domains are added to the daily pull
+         'colliercompanies.com':'Collier Companies','islandvillage.org':'Island Village',
+         'murrayhomesinc.com':'Murray Homes','davisdevelopment.com':'Davis Development'}
 def builder_of(sender):
     s=(sender or '').lower()
     for d,name in DOMAINS.items():
@@ -47,62 +73,95 @@ def builder_of(sender):
     return None
 NOISE=re.compile(r'automatic reply|undeliverable|out of office|read:|accepted:|declined:|delivery has failed|delivery status', re.I)
 NOISE_SENDER=re.compile(r'postmaster@|mailer-daemon|quickbooks@|notification\.intuit|klaviyo|houzz|constructconnect|ccsend|no-?reply', re.I)
-# new-job opener patterns (per doc); precision-favoring
+# new-request subject patterns; precision-favoring
 NEWJOB=re.compile(r'\bwo\b|\bwar\b|warranty task|\(wo\)|buildpro|remediation request|create a plan|plan of repair|truss clean|mold (mediation|remediation)|work order|\bepo\b', re.I)
+# standard first line of our acknowledgment templates (kept narrow on purpose)
+ACK_MARK=re.compile(r'received your (request|instruction|instructions|work order|email)|confirming receipt', re.I)
 
 def is_opener_subject(subj):
     return bool(NEWJOB.search(subj or ''))
 
+def _ok(m,field):
+    try:
+        parse(m[field]); return True
+    except Exception:
+        return False
+
 def compute(inbound, sent, now_iso):
-    # index sent replies by (box, normsubject) -> sorted sent times
+    inbound=[m for m in inbound if isinstance(m,dict) and _ok(m,'received')]
+    sent=[m for m in sent if isinstance(m,dict) and _ok(m,'sent')]
+    # replies indexed by normalized subject across BOTH boxes -> sorted [(sent, box, summary)]
     sent_idx={}
     for m in sent:
-        k=(m['box'], norm(m['subject']))
-        sent_idx.setdefault(k,[]).append(m['sent'])
-    for k in sent_idx: sent_idx[k].sort()
-    seen=set()  # (box, normsubject) already used as opener
-    items=[]; openitems=[]
-    for m in sorted(inbound, key=lambda x:x['received']):
-        b=builder_of(m['sender'])
+        if not m.get('sent'): continue
+        sent_idx.setdefault(norm(m.get('subject')),[]).append((m['sent'], m.get('box'), m.get('summary') or ''))
+    for k in sent_idx: sent_idx[k].sort(key=lambda t:parse(t[0]))
+    # earliest inbound per normalized subject across both boxes
+    first={}
+    for m in sorted(inbound, key=lambda x:parse(x['received'])):
+        b=builder_of(m.get('sender'))
         if not b: continue
-        subj=m['subject'] or ''
-        if NOISE.search(subj) or NOISE_SENDER.search(m['sender'] or ''): continue
-        if not is_opener_subject(subj): continue
-        key=(m['box'], norm(subj))
-        if key in seen: continue   # only first occurrence = the opener
-        seen.add(key)
-        # first reply from the box after opener
+        subj=m.get('subject') or ''
+        if NOISE.search(subj) or NOISE_SENDER.search(m.get('sender') or ''): continue
+        k=norm(subj)
+        if not k: continue
+        if k not in first:
+            first[k]={'subject':subj,'acct':b,'received':m['received'],'boxes':[m.get('box')]}
+        elif m.get('box') not in first[k]['boxes']:
+            first[k]['boxes'].append(m.get('box'))
+    items=[]; openitems=[]
+    for k,o in first.items():
         reply=None
-        for st in sent_idx.get(key,[]):
-            if parse(st)>parse(m['received']):
-                reply=st; break
+        for st,box,summ in sent_idx.get(k,[]):
+            if parse(st)>parse(o['received']):
+                reply=(st,box,summ); break
+        keyword=is_opener_subject(o['subject'])
+        template=bool(reply and ACK_MARK.search(reply[2]))
+        if not (keyword or template): continue      # not a recognisable new request
+        base={'job':o['subject'][:70],'acct':o['acct'],'received':o['received'],
+              'receivedLabel':label(o['received']),'afterHours':not in_hours(o['received']),
+              'box':'+'.join(sorted(x.split('@')[0] for x in o['boxes'] if x))}
         if reply:
-            mins=biz_minutes(m['received'],reply)
-            items.append({'job':subj[:70],'acct':b,'min':mins,'kept':mins<=60,'box':m['box']})
+            mins=biz_minutes(o['received'],reply[0]); raw=raw_minutes(o['received'],reply[0])
+            base.update({'acked':reply[0],'ackedLabel':label(reply[0]),'min':mins,'rawMin':raw,
+                         'kept':mins<=60,'keptRaw':raw<=60,'via':'template' if template else 'keyword'})
+            items.append(base)
         else:
-            wait=biz_minutes(m['received'],now_iso)
-            openitems.append({'job':subj[:70],'acct':b,'waitMin':wait,'box':m['box']})
+            base.update({'waitMin':biz_minutes(o['received'],now_iso),'rawWaitMin':raw_minutes(o['received'],now_iso)})
+            openitems.append(base)
     return items, openitems
 
-def agg(vals):
-    if not vals: return {'count':0,'medianMin':None,'within60':0,'within60Pct':None,'bestMin':None,'worstMin':None}
+def agg(items):
+    vals=[i['min'] for i in items]
+    if not vals: return {'count':0,'medianMin':None,'within60':0,'within60Pct':None,'bestMin':None,'worstMin':None,'within60Raw':0,'medianRawMin':None}
+    raws=[i.get('rawMin',i['min']) for i in items]
     return {'count':len(vals),'medianMin':round(statistics.median(vals)),
             'within60':sum(1 for v in vals if v<=60),
             'within60Pct':round(100*sum(1 for v in vals if v<=60)/len(vals)),
-            'bestMin':min(vals),'worstMin':max(vals)}
+            'bestMin':min(vals),'worstMin':max(vals),
+            'within60Raw':sum(1 for v in raws if v<=60),'medianRawMin':round(statistics.median(raws))}
 
-def build(items, openitems, now_iso, label, auto=True):
-    allv=[i['min'] for i in items]
+def build(items, openitems, now_iso, lbl, auto=True):
+    order=['Neal','Taylor Morrison','Pulte']
+    accts=order+sorted({i['acct'] for i in items}-set(order))
     builders=[]
-    for b in ['Neal','Taylor Morrison','Pulte']:
+    for b in accts:
         v=[i['min'] for i in items if i['acct']==b]
         if v: builders.append({'name':b,'kept':sum(1 for x in v if x<=60),'total':len(v),'medianMin':round(statistics.median(v))})
-    return {'asOf':now_iso,'asOfLabel':label,'auto':auto,'window':'rolling 30 days',
+    cut=parse(now_iso)-timedelta(days=7)
+    wk=[i for i in items if parse(i['received'])>=cut]
+    week=agg(wk)
+    week.update({'from':label(cut.isoformat()),'to':label(now_iso),
+                 'misses':[{'job':i['job'],'acct':i['acct'],'receivedLabel':i['receivedLabel'],'ackedLabel':i['ackedLabel'],'min':i['min'],'rawMin':i['rawMin'],'afterHours':i['afterHours']}
+                           for i in sorted(wk,key=lambda x:-x['min']) if not i['kept']],
+                 'open':[o for o in openitems if parse(o['received'])>=cut]})
+    return {'asOf':now_iso,'asOfLabel':lbl,'auto':auto,'schema':2,'window':'rolling 30 days',
             'boxes':['rest@goaboveandbeyond.us','cons@goaboveandbeyond.us'],
-            'metric':'New-job first email response (Metric 1)','overall':agg(allv),
-            'builders':builders,'items':sorted(items,key=lambda x:x['min']),
+            'metric':'New request received to first acknowledgment sent',
+            'overall':agg(items),'week':week,'builders':builders,
+            'items':sorted(items,key=lambda x:x['min']),
             'openItems':sorted(openitems,key=lambda x:-x['waitMin']),
-            'note':'New-job first email response, business-hours clock (Mon-Fri 8-5 ET). Email time is a floor - some misses were handled same day by phone. Auto-computed daily - spot-check before acting on a single number.'}
+            'note':'Clock starts when the client email lands in rest@ or cons@ and stops at our first email acknowledgment. Business-hours minutes (Mon-Fri 8-5 ET) decide kept/missed; raw minutes are shown too. A phone call does not stop the clock - only an email reply does. Auto-computed daily - spot-check before acting on a single number.'}
 
 if __name__=='__main__':
     inbound=json.load(open('inbound.json')); sent=json.load(open('sent.json'))
@@ -112,4 +171,5 @@ if __name__=='__main__':
     json.dump(data,open('email-response.json','w'),indent=1)
     print('GUARD count=%d'%data['overall']['count'])
     print(json.dumps(data['overall']))
+    print('WEEK',json.dumps({k:data['week'][k] for k in ('count','within60','medianMin')}))
     print([(b['name'],b['kept'],b['total'],b['medianMin']) for b in data['builders']])
