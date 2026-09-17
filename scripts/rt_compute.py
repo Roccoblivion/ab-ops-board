@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-# v2 (9/17/2026) - "New request received -> first acknowledgment sent" for rest@ + cons@.
+# v2.1 (9/17/2026) - "New request received -> first acknowledgment sent" for rest@ + cons@.
+# v2.1: threads are keyed on the job number in the subject (Neal WO no., TM BuildPro order no.) because
+#       our staff append the Albi job number to the subject when they reply, and Neal adds [EXT] tags;
+#       full-subject matching missed real acknowledgments and counted mid-thread replies as new requests.
 # John's definition: the timer starts when the client's email instruction lands in our box
 # and stops when our first email acknowledgment goes back to the client.
 #
@@ -53,13 +56,29 @@ def label(iso):
     h=d.hour%12 or 12
     return '%s %d/%d %d:%02d%s' % (d.strftime('%a'), d.month, d.day, h, d.minute, 'am' if d.hour<12 else 'pm')
 
-def norm(subj):
+PREFIX=re.compile(r'^\s*(?:(?:re|fw|fwd|aw|tr)\s*:|\[\s*ext(?:ernal)?\s*\])\s*', re.I)
+def strip_prefixes(subj):
     s=subj or ""
     while True:
-        n=re.sub(r'^\s*(re|fw|fwd|aw|tr)\s*:\s*','',s,flags=re.I)
+        n=PREFIX.sub('',s)
         if n==s: break
         s=n
-    return re.sub(r'\s+',' ',s).strip().lower()
+    return s
+def norm(subj):
+    return re.sub(r'\s+',' ',strip_prefixes(subj)).strip().lower()
+def is_reply(subj):
+    # a reply/continuation: after dropping [EXT] tags the subject starts with RE: or AW:
+    s=subj or ""
+    while True:
+        n=re.sub(r'^\s*\[\s*ext(?:ernal)?\s*\]\s*','',s,flags=re.I)
+        if n==s: break
+        s=n
+    return bool(re.match(r'^\s*(re|aw)\s*:',s,flags=re.I))
+JOBNO=re.compile(r'(?<!\d)\d{6,}(?!\d)')
+def thread_key(subj):
+    n=norm(subj)
+    m=JOBNO.search(n)
+    return ('n:'+m.group(0)) if m else ('s:'+n)
 
 DOMAINS={'taylormorrison.com':'Taylor Morrison','nealcommunities.com':'Neal',
          'pulte.com':'Pulte','pultegroup.com':'Pulte',
@@ -90,29 +109,36 @@ def _ok(m,field):
 def compute(inbound, sent, now_iso):
     inbound=[m for m in inbound if isinstance(m,dict) and _ok(m,'received')]
     sent=[m for m in sent if isinstance(m,dict) and _ok(m,'sent')]
-    # replies indexed by normalized subject across BOTH boxes -> sorted [(sent, box, summary)]
+    # replies indexed by thread key across BOTH boxes -> sorted [(sent, box, summary)]
     sent_idx={}
     for m in sent:
-        if not m.get('sent'): continue
-        sent_idx.setdefault(norm(m.get('subject')),[]).append((m['sent'], m.get('box'), m.get('summary') or ''))
+        sent_idx.setdefault(thread_key(m.get('subject')),[]).append((m['sent'], m.get('box'), m.get('summary') or ''))
     for k in sent_idx: sent_idx[k].sort(key=lambda t:parse(t[0]))
-    # earliest inbound per normalized subject across both boxes
+    def replies_for(k):
+        if k.startswith('n:'): return sent_idx.get(k,[])
+        # subject key: we often append the Albi job number, so accept replies whose subject STARTS with the opener subject
+        out=[]
+        for sk,v in sent_idx.items():
+            if sk.startswith('s:') and sk[2:].startswith(k[2:]) and len(k)>8: out+=v
+        return sorted(out,key=lambda t:parse(t[0]))
+    # earliest inbound per thread across both boxes
     first={}
     for m in sorted(inbound, key=lambda x:parse(x['received'])):
         b=builder_of(m.get('sender'))
         if not b: continue
         subj=m.get('subject') or ''
         if NOISE.search(subj) or NOISE_SENDER.search(m.get('sender') or ''): continue
-        k=norm(subj)
-        if not k: continue
+        k=thread_key(subj)
+        if len(k)<=2: continue
         if k not in first:
-            first[k]={'subject':subj,'acct':b,'received':m['received'],'boxes':[m.get('box')]}
+            first[k]={'subject':subj,'acct':b,'received':m['received'],'boxes':[m.get('box')],'reply_first':is_reply(subj)}
         elif m.get('box') not in first[k]['boxes']:
             first[k]['boxes'].append(m.get('box'))
     items=[]; openitems=[]
     for k,o in first.items():
+        if o['reply_first']: continue   # thread started before the window or outside these senders - not a new request
         reply=None
-        for st,box,summ in sent_idx.get(k,[]):
+        for st,box,summ in replies_for(k):
             if parse(st)>parse(o['received']):
                 reply=(st,box,summ); break
         keyword=is_opener_subject(o['subject'])
@@ -157,7 +183,7 @@ def build(items, openitems, now_iso, lbl, auto=True):
                  'open':[o for o in openitems if parse(o['received'])>=cut]})
     return {'asOf':now_iso,'asOfLabel':lbl,'auto':auto,'schema':2,'window':'rolling 30 days',
             'boxes':['rest@goaboveandbeyond.us','cons@goaboveandbeyond.us'],
-            'metric':'New request received to first acknowledgment sent',
+            'metric':'New request received to first acknowledgment sent','scriptVersion':'2.1',
             'overall':agg(items),'week':week,'builders':builders,
             'items':sorted(items,key=lambda x:x['min']),
             'openItems':sorted(openitems,key=lambda x:-x['waitMin']),
