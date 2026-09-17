@@ -1,121 +1,294 @@
 {
- "asOf": "2026-09-16T12:00:00Z",
- "asOfLabel": "9/16 baseline (hand-validated)",
- "auto": false,
+ "asOf": "2026-09-17T20:16:36Z",
+ "asOfLabel": "9/17 4:16pm et - rest@ only, checked against the mailbox",
+ "auto": true,
+ "schema": 2,
  "window": "rolling 30 days",
  "boxes": [
-  "rest@goaboveandbeyond.us",
-  "cons@goaboveandbeyond.us"
+  "rest@goaboveandbeyond.us"
  ],
- "metric": "New-job first email response (Metric 1)",
+ "metric": "New request received to first acknowledgment sent",
+ "scriptVersion": "2.2",
  "overall": {
-  "count": 13,
-  "medianMin": 56,
-  "within60": 7,
-  "within60Pct": 54,
+  "count": 15,
+  "medianMin": 88,
+  "within60": 6,
+  "within60Pct": 40,
   "bestMin": 15,
-  "worstMin": 194
+  "worstMin": 1347,
+  "within60Raw": 6,
+  "medianRawMin": 104
+ },
+ "week": {
+  "count": 2,
+  "medianMin": 26,
+  "within60": 2,
+  "within60Pct": 100,
+  "bestMin": 15,
+  "worstMin": 38,
+  "within60Raw": 2,
+  "medianRawMin": 26,
+  "from": "Thu 9/10 4:16pm",
+  "to": "Thu 9/17 4:16pm",
+  "misses": [],
+  "open": []
  },
  "builders": [
   {
    "name": "Neal",
-   "kept": 5,
-   "total": 7,
-   "medianMin": 50
+   "kept": 6,
+   "total": 11,
+   "medianMin": 56
   },
   {
    "name": "Taylor Morrison",
-   "kept": 1,
+   "kept": 0,
    "total": 4,
-   "medianMin": 85
-  },
-  {
-   "name": "Pulte",
-   "kept": 1,
-   "total": 2,
-   "medianMin": 90
+   "medianMin": 141
   }
  ],
  "items": [
   {
-   "job": "8070 Anthirium (WO 11002)",
+   "job": "Warranty WO WAR, 00211002, 8070, Anthirium Loop",
    "acct": "Neal",
+   "received": "2026-09-16T17:33:16.000Z",
+   "receivedLabel": "Wed 9/16 1:33pm",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-09-16T17:48:21.000Z",
+   "ackedLabel": "Wed 9/16 1:48pm",
    "min": 15,
-   "kept": true
+   "rawMin": 15,
+   "kept": true,
+   "keptRaw": true,
+   "via": "template",
+   "matched": "thread"
   },
   {
-   "job": "8067 Anthirium (WO 09845)",
+   "job": "Warranty WO WAR, 00210392, 2258, Lady Palm Loop",
    "acct": "Neal",
+   "received": "2026-09-02T20:09:15.000Z",
+   "receivedLabel": "Wed 9/2 4:09pm",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-09-02T20:25:13.000Z",
+   "ackedLabel": "Wed 9/2 4:25pm",
+   "min": 16,
+   "rawMin": 16,
+   "kept": true,
+   "keptRaw": true,
+   "via": "template",
+   "matched": "thread"
+  },
+  {
+   "job": "Warranty WO WAR, 00209845, 8067, Anthirium Loop",
+   "acct": "Neal",
+   "received": "2026-08-20T20:25:55.000Z",
+   "receivedLabel": "Thu 8/20 4:25pm",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-08-20T20:57:53.000Z",
+   "ackedLabel": "Thu 8/20 4:57pm",
    "min": 32,
-   "kept": true
+   "rawMin": 32,
+   "kept": true,
+   "keptRaw": true,
+   "via": "keyword",
+   "matched": "thread"
   },
   {
-   "job": "755 Balleby / Reagan Landing",
-   "acct": "Pulte",
-   "min": 34,
-   "kept": true
-  },
-  {
-   "job": "15265 Contenta / Azario 6082",
-   "acct": "Taylor Morrison",
-   "min": 35,
-   "kept": true
-  },
-  {
-   "job": "2246 Lady Palm (WO 10954)",
+   "job": "Warranty WO WAR, 00210954, 2246, Lady Palm Loop",
    "acct": "Neal",
+   "received": "2026-09-15T19:27:13.000Z",
+   "receivedLabel": "Tue 9/15 3:27pm",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-09-15T20:05:17.000Z",
+   "ackedLabel": "Tue 9/15 4:05pm",
    "min": 38,
-   "kept": true
+   "rawMin": 38,
+   "kept": true,
+   "keptRaw": true,
+   "via": "template",
+   "matched": "thread"
   },
   {
-   "job": "2803 Butterfly Jasmine (WO 10260)",
+   "job": "Warranty WO WAR, 00210260, 2803, Butterfly Jasmine Trail",
    "acct": "Neal",
+   "received": "2026-08-31T19:47:53.000Z",
+   "receivedLabel": "Mon 8/31 3:47pm",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-08-31T20:37:53.000Z",
+   "ackedLabel": "Mon 8/31 4:37pm",
    "min": 50,
-   "kept": true
+   "rawMin": 50,
+   "kept": true,
+   "keptRaw": true,
+   "via": "keyword",
+   "matched": "thread"
   },
   {
-   "job": "8132 Anthirium (WO 10046)",
+   "job": "Warranty WO WAR, 00210046, 8132, Anthirium Loop",
    "acct": "Neal",
+   "received": "2026-08-26T14:11:33.000Z",
+   "receivedLabel": "Wed 8/26 10:11am",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-08-26T15:07:25.000Z",
+   "ackedLabel": "Wed 8/26 11:07am",
    "min": 56,
-   "kept": true
+   "rawMin": 56,
+   "kept": true,
+   "keptRaw": true,
+   "via": "keyword",
+   "matched": "thread"
   },
   {
-   "job": "718 Steel Dr / Indigo Creek 83",
+   "job": "Indigo Creek lot 83 / 718 Steel Drive / Truss cleaning",
    "acct": "Taylor Morrison",
+   "received": "2026-08-31T19:37:55.000Z",
+   "receivedLabel": "Mon 8/31 3:37pm",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-08-31T21:21:37.000Z",
+   "ackedLabel": "Mon 8/31 5:21pm",
    "min": 82,
-   "kept": false
+   "rawMin": 104,
+   "kept": false,
+   "keptRaw": false,
+   "via": "template",
+   "matched": "thread"
   },
   {
-   "job": "16430 Paynes Mill (create a plan)",
+   "job": "Park East - 16430 Paynes Mill // Create a plan to repair ",
    "acct": "Taylor Morrison",
+   "received": "2026-09-03T12:44:03.000Z",
+   "receivedLabel": "Thu 9/3 8:44am",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-09-03T14:12:32.000Z",
+   "ackedLabel": "Thu 9/3 10:12am",
    "min": 88,
-   "kept": false
+   "rawMin": 88,
+   "kept": false,
+   "keptRaw": false,
+   "via": "keyword",
+   "matched": "thread"
   },
   {
-   "job": "2448 Star Apple (WO 10025)",
+   "job": "Warranty WO WAR, 00210025, 2448, Star Apple Way",
    "acct": "Neal",
+   "received": "2026-08-26T12:33:48.000Z",
+   "receivedLabel": "Wed 8/26 8:33am",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-08-26T14:42:26.000Z",
+   "ackedLabel": "Wed 8/26 10:42am",
    "min": 129,
-   "kept": false
+   "rawMin": 129,
+   "kept": false,
+   "keptRaw": false,
+   "via": "template",
+   "matched": "thread"
   },
   {
-   "job": "2532 Star Apple (WO 09787)",
+   "job": "Warranty WO WAR, 00209787, 2532, Star Apple Way",
    "acct": "Neal",
+   "received": "2026-08-20T17:29:06.000Z",
+   "receivedLabel": "Thu 8/20 1:29pm",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-08-20T19:40:55.000Z",
+   "ackedLabel": "Thu 8/20 3:40pm",
    "min": 132,
-   "kept": false
+   "rawMin": 132,
+   "kept": false,
+   "keptRaw": false,
+   "via": "keyword",
+   "matched": "thread"
   },
   {
-   "job": "6236 Grande Talon",
-   "acct": "Pulte",
-   "min": 145,
-   "kept": false
+   "job": "Warranty WO WAR, 00209923, 8067, Anthirium Loop",
+   "acct": "Neal",
+   "received": "2026-08-24T14:57:12.000Z",
+   "receivedLabel": "Mon 8/24 10:57am",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-08-24T17:21:35.000Z",
+   "ackedLabel": "Mon 8/24 1:21pm",
+   "min": 144,
+   "rawMin": 144,
+   "kept": false,
+   "keptRaw": false,
+   "via": "keyword",
+   "matched": "thread"
   },
   {
-   "job": "10852 Eclipse (Remediation Request)",
+   "job": "Remediation Request: Skye Ranch - Lot 6156_10852 Eclipse Street",
    "acct": "Taylor Morrison",
+   "received": "2026-09-03T15:20:32.000Z",
+   "receivedLabel": "Thu 9/3 11:20am",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-09-03T18:34:31.000Z",
+   "ackedLabel": "Thu 9/3 2:34pm",
    "min": 194,
-   "kept": false
+   "rawMin": 194,
+   "kept": false,
+   "keptRaw": false,
+   "via": "template",
+   "matched": "thread"
+  },
+  {
+   "job": "mold mediation",
+   "acct": "Taylor Morrison",
+   "received": "2026-08-31T11:45:57.000Z",
+   "receivedLabel": "Mon 8/31 7:45am",
+   "afterHours": true,
+   "box": "rest",
+   "acked": "2026-08-31T15:36:50.000Z",
+   "ackedLabel": "Mon 8/31 11:36am",
+   "min": 217,
+   "rawMin": 231,
+   "kept": false,
+   "keptRaw": false,
+   "via": "keyword",
+   "matched": "thread"
+  },
+  {
+   "job": "Warranty WO WAR, 00210257, 6560, Big Bayou Drive",
+   "acct": "Neal",
+   "received": "2026-08-31T19:20:34.000Z",
+   "receivedLabel": "Mon 8/31 3:20pm",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-09-01T18:14:10.000Z",
+   "ackedLabel": "Tue 9/1 2:14pm",
+   "min": 474,
+   "rawMin": 1374,
+   "kept": false,
+   "keptRaw": false,
+   "via": "keyword",
+   "matched": "address"
+  },
+  {
+   "job": "Warranty WO WAR, 00210575, 2553, Paradise Plum Drive",
+   "acct": "Neal",
+   "received": "2026-09-08T15:05:59.000Z",
+   "receivedLabel": "Tue 9/8 11:05am",
+   "afterHours": false,
+   "box": "rest",
+   "acked": "2026-09-10T19:33:07.000Z",
+   "ackedLabel": "Thu 9/10 3:33pm",
+   "min": 1347,
+   "rawMin": 3147,
+   "kept": false,
+   "keptRaw": false,
+   "via": "keyword",
+   "matched": "thread"
   }
  ],
  "openItems": [],
- "note": "New-job first email response, business-hours clock (Mon-Fri 8-5 ET). Email time is a floor - some misses were handled same day by phone. This 9/16 baseline is hand-validated; the board refreshes it daily going forward (auto-computed - spot-check before acting on a single number)."
+ "note": "Clock starts when the client email lands in rest@ or cons@ and stops at our first email acknowledgment. Business-hours minutes (Mon-Fri 8-5 ET) decide kept/missed; raw minutes are shown too. A phone call does not stop the clock - only an email reply does. Counts requests the tracker can recognise: work-order / EPO / remediation-request style subjects, or any thread where our first reply says we are confirming receipt. Plain-subject requests answered without that line are not counted yet. Auto-computed - spot-check before acting on a single number."
 }
