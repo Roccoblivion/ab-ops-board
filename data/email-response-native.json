@@ -1,0 +1,1008 @@
+{
+  "asOf": "2026-09-21T12:11:47.129Z",
+  "asOfLabel": "2026-09-21 12:11 UTC",
+  "auto": true,
+  "window": "30 days",
+  "boxes": [
+    "rest@goaboveandbeyond.us",
+    "cons@goaboveandbeyond.us"
+  ],
+  "metric": "email acknowledgment (conversationId threading, native)",
+  "overall": {
+    "count": 24,
+    "medianMin": 97,
+    "within60": 8,
+    "within60Pct": 33,
+    "bestMin": 3,
+    "worstMin": 3378
+  },
+  "builders": [
+    {
+      "name": "Taylor Morrison",
+      "kept": 3,
+      "total": 12,
+      "medianMin": 139
+    },
+    {
+      "name": "Neal Communities",
+      "kept": 5,
+      "total": 9,
+      "medianMin": 57
+    },
+    {
+      "name": "Pulte",
+      "kept": 0,
+      "total": 3,
+      "medianMin": 99
+    }
+  ],
+  "items": [
+    {
+      "job": "16556 BERGAMO PL / Craig Owens",
+      "acct": "Taylor Morrison",
+      "min": 183,
+      "kept": false
+    },
+    {
+      "job": "Warranty WO WAR, 00209923, 8067, Anthirium Loop",
+      "acct": "Neal Communities",
+      "min": 145,
+      "kept": false
+    },
+    {
+      "job": "[EXT] RE: WI 723 8027 Anthirium Loop-26-0232-WTR",
+      "acct": "Neal Communities",
+      "min": 2082,
+      "kept": false
+    },
+    {
+      "job": "[EXT] RE: 8549 Canyon Creek Drive Walsh REMEDIAT",
+      "acct": "Neal Communities",
+      "min": 425,
+      "kept": false
+    },
+    {
+      "job": "Warranty WO WAR, 00210025, 2448, Star Apple Way",
+      "acct": "Neal Communities",
+      "min": 130,
+      "kept": false
+    },
+    {
+      "job": "Warranty WO WAR, 00210046, 8132, Anthirium Loop",
+      "acct": "Neal Communities",
+      "min": 57,
+      "kept": true
+    },
+    {
+      "job": "15245 Shady Palms Lane-26-0253-WTR",
+      "acct": "Taylor Morrison",
+      "min": 237,
+      "kept": false
+    },
+    {
+      "job": "8228 Summer Night Road-26-0264-MLD",
+      "acct": "Taylor Morrison",
+      "min": 95,
+      "kept": false
+    },
+    {
+      "job": "09 Skye Ranch T 62 - 14284202, 001054_9072 Luna ",
+      "acct": "Taylor Morrison",
+      "min": 502,
+      "kept": false
+    },
+    {
+      "job": "mold mediation",
+      "acct": "Taylor Morrison",
+      "min": 217,
+      "kept": false
+    },
+    {
+      "job": "Azario 6082",
+      "acct": "Taylor Morrison",
+      "min": 36,
+      "kept": true
+    },
+    {
+      "job": "Indigo Creek lot 83 / 718 Steel Drive / Truss cl",
+      "acct": "Taylor Morrison",
+      "min": 83,
+      "kept": false
+    },
+    {
+      "job": "Warranty WO WAR, 00210260, 2803, Butterfly Jasmi",
+      "acct": "Neal Communities",
+      "min": 51,
+      "kept": true
+    },
+    {
+      "job": "09 PE AZARIO 52 - 14308201, 000224_4302 POND BRO",
+      "acct": "Taylor Morrison",
+      "min": 3378,
+      "kept": false
+    },
+    {
+      "job": "Warranty WO WAR, 00210392, 2258, Lady Palm Loop",
+      "acct": "Neal Communities",
+      "min": 17,
+      "kept": true
+    },
+    {
+      "job": "Park East - 16430 Paynes Mill // Create a plan t",
+      "acct": "Taylor Morrison",
+      "min": 89,
+      "kept": false
+    },
+    {
+      "job": "Remediation Request: Skye Ranch - Lot 6156_10852",
+      "acct": "Taylor Morrison",
+      "min": 195,
+      "kept": false
+    },
+    {
+      "job": "09 Skye Ranch T 16TH - 14281201, 342498_8641 DAY",
+      "acct": "Taylor Morrison",
+      "min": 3,
+      "kept": true
+    },
+    {
+      "job": "Lilly Elaine Way Manatee County-26-0286-STC",
+      "acct": "Pulte",
+      "min": 78,
+      "kept": false
+    },
+    {
+      "job": "Warranty WO WAR, 00210575, 2553, Paradise Plum D",
+      "acct": "Neal Communities",
+      "min": 52,
+      "kept": true
+    },
+    {
+      "job": "Reagan Landing 09500 Truss/Wood Framing cleaning",
+      "acct": "Pulte",
+      "min": 99,
+      "kept": false
+    },
+    {
+      "job": "Reagan Landing 01300 Rough lumber/truss cleaning",
+      "acct": "Pulte",
+      "min": 984,
+      "kept": false
+    },
+    {
+      "job": "9298 Torrent Trl, Ticket 879332",
+      "acct": "Taylor Morrison",
+      "min": 6,
+      "kept": true
+    },
+    {
+      "job": "Warranty WO WAR, 00210615, 10133, Spruce River W",
+      "acct": "Neal Communities",
+      "min": 22,
+      "kept": true
+    }
+  ],
+  "openItems": [
+    {
+      "job": "PRV Inspection Final Report",
+      "acct": "Taylor Morrison",
+      "waitMin": 8672
+    },
+    {
+      "job": "Important Notice from the Office of the County S",
+      "acct": "Manatee County",
+      "waitMin": 8454
+    },
+    {
+      "job": "09 Skye Ranch T 42 - 14296202, 003100_8628 Snowf",
+      "acct": "Taylor Morrison",
+      "waitMin": 8319
+    },
+    {
+      "job": "Warranty WO WAR, 00210257, 6560, Big Bayou Drive",
+      "acct": "Neal Communities",
+      "waitMin": 7672
+    },
+    {
+      "job": "Temporary Online Payment Processing Outage",
+      "acct": "Manatee County",
+      "waitMin": 7554
+    },
+    {
+      "job": "Warranty WO WAR, 00210257, 6560, Big Bayou Drive",
+      "acct": "Neal Communities",
+      "waitMin": 7488
+    },
+    {
+      "job": "Temporary Online Payment Processing Outage Resol",
+      "acct": "Manatee County",
+      "waitMin": 7442
+    },
+    {
+      "job": "New Scheduling Time For Inspection",
+      "acct": "Manatee County",
+      "waitMin": 6939
+    },
+    {
+      "job": "09 ESP AZARIO GC 52 - 14302201, 006165_15838 SAN",
+      "acct": "Taylor Morrison",
+      "waitMin": 6733
+    },
+    {
+      "job": "09 Skye Ranch T 42 - 14296202, 003100_8628 Snowf",
+      "acct": "Taylor Morrison",
+      "waitMin": 5904
+    },
+    {
+      "job": "Warranty WO WAR, 00210575, 2553, Paradise Plum D",
+      "acct": "Neal Communities",
+      "waitMin": 4687
+    },
+    {
+      "job": "South Pod Team event - October 9th",
+      "acct": "Taylor Morrison",
+      "waitMin": 4033
+    },
+    {
+      "job": "Talon Preserve Lot 430 - 6236 Grande Talon Ln",
+      "acct": "Pulte",
+      "waitMin": 3792
+    },
+    {
+      "job": "Notice to Builders: Water Meter Deposit Requirem",
+      "acct": "Manatee County",
+      "waitMin": 2273
+    },
+    {
+      "job": "Warranty WO WAR, 00210954, 2246, Lady Palm Loop",
+      "acct": "Neal Communities",
+      "waitMin": 1725
+    },
+    {
+      "job": "Warranty WO WAR, 00211002, 8070, Anthirium Loop",
+      "acct": "Neal Communities",
+      "waitMin": 1299
+    },
+    {
+      "job": "Reagan Landing 09500 Truss/Wood Framing cleaning",
+      "acct": "Pulte",
+      "waitMin": 10713
+    },
+    {
+      "job": "Reagan Landing 04500 Truss quick clean",
+      "acct": "Pulte",
+      "waitMin": 4752
+    }
+  ],
+  "metric2": {
+    "overall": {
+      "count": 86,
+      "medianMin": 418,
+      "within60": 11,
+      "within60Pct": 13,
+      "bestMin": 3,
+      "worstMin": 6917
+    },
+    "builders": [
+      {
+        "name": "Taylor Morrison",
+        "kept": 5,
+        "total": 41,
+        "medianMin": 555
+      },
+      {
+        "name": "Neal Communities",
+        "kept": 3,
+        "total": 32,
+        "medianMin": 253
+      },
+      {
+        "name": "Pulte",
+        "kept": 3,
+        "total": 13,
+        "medianMin": 328
+      }
+    ],
+    "items": [
+      {
+        "job": "16556 BERGAMO PL / Craig Owens",
+        "acct": "Taylor Morrison",
+        "min": 602,
+        "kept": false
+      },
+      {
+        "job": "16556 BERGAMO PL / Craig Owens",
+        "acct": "Taylor Morrison",
+        "min": 15,
+        "kept": true
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00209923, 8067, Anthi",
+        "acct": "Neal Communities",
+        "min": 198,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00209923, 8067, Anthi",
+        "acct": "Neal Communities",
+        "min": 441,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00209923, 8067, Anthi",
+        "acct": "Neal Communities",
+        "min": 91,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00209923, 8067, Anthi",
+        "acct": "Neal Communities",
+        "min": 390,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00209923, 8067, Anthi",
+        "acct": "Neal Communities",
+        "min": 186,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00209923, 8067, Anthi",
+        "acct": "Neal Communities",
+        "min": 2133,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00209923, 8067, Anthi",
+        "acct": "Neal Communities",
+        "min": 3568,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00209923, 8067, Anthi",
+        "acct": "Neal Communities",
+        "min": 226,
+        "kept": false
+      },
+      {
+        "job": "15061 Cuzcorro Court-26-0252-DMO",
+        "acct": "Taylor Morrison",
+        "min": 131,
+        "kept": false
+      },
+      {
+        "job": "15061 Cuzcorro Court-26-0252-DMO",
+        "acct": "Taylor Morrison",
+        "min": 6917,
+        "kept": false
+      },
+      {
+        "job": "10649 Orbit Terrace-26-0228-WTR",
+        "acct": "Taylor Morrison",
+        "min": 2835,
+        "kept": false
+      },
+      {
+        "job": "09 Palmero 52s - 14317201, 000282_5671 BLUE REEF",
+        "acct": "Taylor Morrison",
+        "min": 984,
+        "kept": false
+      },
+      {
+        "job": "09 Palmero 52s - 14317201, 000282_5671 BLUE REEF",
+        "acct": "Taylor Morrison",
+        "min": 2065,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: 8549 Canyon Creek Drive Walsh REMEDIAT",
+        "acct": "Neal Communities",
+        "min": 147,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: 8549 Canyon Creek Drive Walsh REMEDIAT",
+        "acct": "Neal Communities",
+        "min": 208,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: 8549 Canyon Creek Drive Walsh REMEDIAT",
+        "acct": "Neal Communities",
+        "min": 1514,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: 8549 Canyon Creek Drive Walsh REMEDIAT",
+        "acct": "Neal Communities",
+        "min": 365,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: 8549 Canyon Creek Drive Walsh REMEDIAT",
+        "acct": "Neal Communities",
+        "min": 493,
+        "kept": false
+      },
+      {
+        "job": "846 Steel Drive-26-0257-STC",
+        "acct": "Taylor Morrison",
+        "min": 185,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210025, 2448, Star ",
+        "acct": "Neal Communities",
+        "min": 51,
+        "kept": true
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210025, 2448, Star ",
+        "acct": "Neal Communities",
+        "min": 249,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210025, 2448, Star ",
+        "acct": "Neal Communities",
+        "min": 758,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210046, 8132, Anthi",
+        "acct": "Neal Communities",
+        "min": 351,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210046, 8132, Anthi",
+        "acct": "Neal Communities",
+        "min": 357,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210046, 8132, Anthi",
+        "acct": "Neal Communities",
+        "min": 235,
+        "kept": false
+      },
+      {
+        "job": "DWC Lot 191 - 19931 Indian Rock Place - 19931 In",
+        "acct": "Pulte",
+        "min": 1620,
+        "kept": false
+      },
+      {
+        "job": "15245 Shady Palms Lane-26-0253-WTR",
+        "acct": "Taylor Morrison",
+        "min": 2552,
+        "kept": false
+      },
+      {
+        "job": "8581 Lunar Skye Street – Proposed Project Timeli",
+        "acct": "Taylor Morrison",
+        "min": 1151,
+        "kept": false
+      },
+      {
+        "job": "15830 San Lazzaro-26-0214-WTR",
+        "acct": "Taylor Morrison",
+        "min": 202,
+        "kept": false
+      },
+      {
+        "job": "8228 Summer Night Road-26-0264-MLD",
+        "acct": "Taylor Morrison",
+        "min": 74,
+        "kept": false
+      },
+      {
+        "job": "8228 Summer Night Road-26-0264-MLD",
+        "acct": "Taylor Morrison",
+        "min": 820,
+        "kept": false
+      },
+      {
+        "job": "Indigo Creek lot 83 / 718 Steel Drive / Truss cl",
+        "acct": "Taylor Morrison",
+        "min": 16,
+        "kept": true
+      },
+      {
+        "job": "Indigo Creek lot 83 / 718 Steel Drive / Truss cl",
+        "acct": "Taylor Morrison",
+        "min": 546,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210260, 2803, Butte",
+        "acct": "Neal Communities",
+        "min": 5993,
+        "kept": false
+      },
+      {
+        "job": "[EXT] 6560 Big Bayou Dr-26-0274-MLD",
+        "acct": "Neal Communities",
+        "min": 41,
+        "kept": true
+      },
+      {
+        "job": "[EXT] 6560 Big Bayou Dr-26-0274-MLD",
+        "acct": "Neal Communities",
+        "min": 104,
+        "kept": false
+      },
+      {
+        "job": "15175 Contenta Loop-26-0270-STC",
+        "acct": "Taylor Morrison",
+        "min": 409,
+        "kept": false
+      },
+      {
+        "job": "15175 Contenta Loop-26-0270-STC",
+        "acct": "Taylor Morrison",
+        "min": 884,
+        "kept": false
+      },
+      {
+        "job": "15175 Contenta Loop-26-0270-STC",
+        "acct": "Taylor Morrison",
+        "min": 467,
+        "kept": false
+      },
+      {
+        "job": "15175 Contenta Loop-26-0270-STC",
+        "acct": "Taylor Morrison",
+        "min": 126,
+        "kept": false
+      },
+      {
+        "job": "15175 Contenta Loop-26-0270-STC",
+        "acct": "Taylor Morrison",
+        "min": 64,
+        "kept": false
+      },
+      {
+        "job": "09 ESP AZARIO GC 52 - 14302201, 006165_15838 SAN",
+        "acct": "Taylor Morrison",
+        "min": 35,
+        "kept": true
+      },
+      {
+        "job": "09 ESP AZARIO GC 52 - 14302201, 006165_15838 SAN",
+        "acct": "Taylor Morrison",
+        "min": 1526,
+        "kept": false
+      },
+      {
+        "job": "09 ESP AZARIO GC 52 - 14302201, 006165_15838 SAN",
+        "acct": "Taylor Morrison",
+        "min": 707,
+        "kept": false
+      },
+      {
+        "job": "09 ESP AZARIO GC 52 - 14302201, 006165_15838 SAN",
+        "acct": "Taylor Morrison",
+        "min": 3,
+        "kept": true
+      },
+      {
+        "job": "3067 Porto Lane-26-0271-STC",
+        "acct": "Taylor Morrison",
+        "min": 764,
+        "kept": false
+      },
+      {
+        "job": "3067 Porto Lane-26-0271-STC",
+        "acct": "Taylor Morrison",
+        "min": 521,
+        "kept": false
+      },
+      {
+        "job": "3211 Porto Lane-26-0272-STC",
+        "acct": "Taylor Morrison",
+        "min": 766,
+        "kept": false
+      },
+      {
+        "job": "3211 Porto Lane-26-0272-STC",
+        "acct": "Taylor Morrison",
+        "min": 509,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE:  Warranty WO WAR, 00210392, 2258, Lady",
+        "acct": "Neal Communities",
+        "min": 191,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE:  Warranty WO WAR, 00210392, 2258, Lady",
+        "acct": "Neal Communities",
+        "min": 73,
+        "kept": false
+      },
+      {
+        "job": "6270 Grandview Hill Court-26-0244-MLD",
+        "acct": "Taylor Morrison",
+        "min": 914,
+        "kept": false
+      },
+      {
+        "job": "Lilly Elaine Way Manatee County-26-0286-STC",
+        "acct": "Pulte",
+        "min": 328,
+        "kept": false
+      },
+      {
+        "job": "Lilly Elaine Way Manatee County-26-0286-STC",
+        "acct": "Pulte",
+        "min": 318,
+        "kept": false
+      },
+      {
+        "job": "Lilly Elaine Way Manatee County-26-0286-STC",
+        "acct": "Pulte",
+        "min": 89,
+        "kept": false
+      },
+      {
+        "job": "09 Skye Ranch T 16TH - 14281201, 342498_8641 DAY",
+        "acct": "Taylor Morrison",
+        "min": 75,
+        "kept": false
+      },
+      {
+        "job": "884 Steel Drive-26-0263-STC",
+        "acct": "Taylor Morrison",
+        "min": 12,
+        "kept": true
+      },
+      {
+        "job": "10648 Orbit Terrace-26-0291-MLD",
+        "acct": "Taylor Morrison",
+        "min": 372,
+        "kept": false
+      },
+      {
+        "job": "10648 Orbit Terrace-26-0291-MLD",
+        "acct": "Taylor Morrison",
+        "min": 1480,
+        "kept": false
+      },
+      {
+        "job": "10648 Orbit Terrace-26-0291-MLD",
+        "acct": "Taylor Morrison",
+        "min": 1014,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210575, 2553, Parad",
+        "acct": "Neal Communities",
+        "min": 431,
+        "kept": false
+      },
+      {
+        "job": "6236 Grande Talon Lane-26-0289-STC",
+        "acct": "Pulte",
+        "min": 107,
+        "kept": false
+      },
+      {
+        "job": "6236 Grande Talon Lane-26-0289-STC",
+        "acct": "Pulte",
+        "min": 27,
+        "kept": true
+      },
+      {
+        "job": "6236 Grande Talon Lane-26-0289-STC",
+        "acct": "Pulte",
+        "min": 1765,
+        "kept": false
+      },
+      {
+        "job": "Lilly Elaine Way Manatee County-26-0286-STC",
+        "acct": "Pulte",
+        "min": 2535,
+        "kept": false
+      },
+      {
+        "job": "15225 Zaletti Street-26-0290-WTR",
+        "acct": "Taylor Morrison",
+        "min": 555,
+        "kept": false
+      },
+      {
+        "job": "15225 Zaletti Street-26-0290-WTR",
+        "acct": "Taylor Morrison",
+        "min": 1089,
+        "kept": false
+      },
+      {
+        "job": "8252 Summer Night Road-26-0297-MLD",
+        "acct": "Taylor Morrison",
+        "min": 435,
+        "kept": false
+      },
+      {
+        "job": "8252 Summer Night Road-26-0297-MLD",
+        "acct": "Taylor Morrison",
+        "min": 1644,
+        "kept": false
+      },
+      {
+        "job": "8228 Summer Night Road-26-0264-MLD",
+        "acct": "Taylor Morrison",
+        "min": 427,
+        "kept": false
+      },
+      {
+        "job": "09 Azario 20TH - 14327301, 041119_3035 NOVARA LA",
+        "acct": "Taylor Morrison",
+        "min": 1308,
+        "kept": false
+      },
+      {
+        "job": "[EXT] Re: Warranty WO WAR, 00210954, 2246, Lady ",
+        "acct": "Neal Communities",
+        "min": 60,
+        "kept": true
+      },
+      {
+        "job": "[EXT] Re: Warranty WO WAR, 00210954, 2246, Lady ",
+        "acct": "Neal Communities",
+        "min": 612,
+        "kept": false
+      },
+      {
+        "job": "[EXT] Re: Warranty WO WAR, 00210954, 2246, Lady ",
+        "acct": "Neal Communities",
+        "min": 256,
+        "kept": false
+      },
+      {
+        "job": "[EXT] Re: Warranty WO WAR, 00211002, 8070, Anthi",
+        "acct": "Neal Communities",
+        "min": 486,
+        "kept": false
+      },
+      {
+        "job": "[EXT] Re: Warranty WO WAR, 00211002, 8070, Anthi",
+        "acct": "Neal Communities",
+        "min": 89,
+        "kept": false
+      },
+      {
+        "job": "Reagan Landing 09500 Truss/Wood Framing cleaning",
+        "acct": "Pulte",
+        "min": 391,
+        "kept": false
+      },
+      {
+        "job": "Reagan Landing 09500 Truss/Wood Framing cleaning",
+        "acct": "Pulte",
+        "min": 4,
+        "kept": true
+      },
+      {
+        "job": "Reagan Landing 09500 Truss/Wood Framing cleaning",
+        "acct": "Pulte",
+        "min": 18,
+        "kept": true
+      },
+      {
+        "job": "Reagan Landing 09500 Truss/Wood Framing cleaning",
+        "acct": "Pulte",
+        "min": 3702,
+        "kept": false
+      },
+      {
+        "job": "16556 BERGAMO PL / Craig Owens",
+        "acct": "Taylor Morrison",
+        "min": 2810,
+        "kept": false
+      },
+      {
+        "job": "Reagan Landing 01300 Rough lumber/truss cleaning",
+        "acct": "Pulte",
+        "min": 2143,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE: WI 723 8027 Anthirium Loop-26-0232-WTR",
+        "acct": "Neal Communities",
+        "min": 1066,
+        "kept": false
+      },
+      {
+        "job": "[EXT] RE:  Warranty WO WAR, 00210615, 10133, Spr",
+        "acct": "Neal Communities",
+        "min": 91,
+        "kept": false
+      }
+    ],
+    "openItems": [
+      {
+        "job": "16556 BERGAMO PL / Craig Owens",
+        "acct": "Taylor Morrison",
+        "waitMin": 7784
+      },
+      {
+        "job": "15061 Cuzcorro Court-26-0252-DMO",
+        "acct": "Taylor Morrison",
+        "waitMin": 1256
+      },
+      {
+        "job": "09 Indigo Creek 50s - 11620201, 000019_840 Steel",
+        "acct": "Taylor Morrison",
+        "waitMin": 10436
+      },
+      {
+        "job": "09 Palmero 52s - 14317201, 000282_5671 BLUE REEF",
+        "acct": "Taylor Morrison",
+        "waitMin": 5736
+      },
+      {
+        "job": "846 Steel Drive-26-0257-STC",
+        "acct": "Taylor Morrison",
+        "waitMin": 3902
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210025, 2448, Star ",
+        "acct": "Neal Communities",
+        "waitMin": 8221
+      },
+      {
+        "job": "[EXT] RE: Warranty WO WAR, 00210046, 8132, Anthi",
+        "acct": "Neal Communities",
+        "waitMin": 8345
+      },
+      {
+        "job": "15245 Shady Palms Lane-26-0253-WTR",
+        "acct": "Taylor Morrison",
+        "waitMin": 530
+      },
+      {
+        "job": "8228 Summer Night Road-26-0264-MLD",
+        "acct": "Taylor Morrison",
+        "waitMin": 3252
+      },
+      {
+        "job": "09 Skye Ranch T 62 - 14284202, 001054_9072 Luna ",
+        "acct": "Taylor Morrison",
+        "waitMin": 7670
+      },
+      {
+        "job": "mold mediation",
+        "acct": "Taylor Morrison",
+        "waitMin": 7854
+      },
+      {
+        "job": "Azario 6082",
+        "acct": "Taylor Morrison",
+        "waitMin": 7186
+      },
+      {
+        "job": "[EXT] RE:  Warranty WO WAR, 00210260, 2803, Butt",
+        "acct": "Neal Communities",
+        "waitMin": 967
+      },
+      {
+        "job": "09 PE AZARIO 52 - 14308201, 000224_4302 POND BRO",
+        "acct": "Taylor Morrison",
+        "waitMin": 3754
+      },
+      {
+        "job": "15175 Contenta Loop-26-0270-STC",
+        "acct": "Taylor Morrison",
+        "waitMin": 2891
+      },
+      {
+        "job": "3067 Porto Lane-26-0271-STC",
+        "acct": "Taylor Morrison",
+        "waitMin": 3847
+      },
+      {
+        "job": "[EXT] RE:  Warranty WO WAR, 00210392, 2258, Lady",
+        "acct": "Neal Communities",
+        "waitMin": 2652
+      },
+      {
+        "job": "Park East - 16430 Paynes Mill // Create a plan t",
+        "acct": "Taylor Morrison",
+        "waitMin": 3749
+      },
+      {
+        "job": "Remediation Request: Skye Ranch - Lot 6156_10852",
+        "acct": "Taylor Morrison",
+        "waitMin": 3605
+      },
+      {
+        "job": "6270 Grandview Hill Court-26-0244-MLD",
+        "acct": "Taylor Morrison",
+        "waitMin": 3926
+      },
+      {
+        "job": "[EXT] RE:  Warranty WO WAR, 00210615, 10133, Spr",
+        "acct": "Neal Communities",
+        "waitMin": 378
+      },
+      {
+        "job": "RE : 15225 Zaletti Place New Job",
+        "acct": "Taylor Morrison",
+        "waitMin": 3792
+      },
+      {
+        "job": "6236 Grande Talon Lane-26-0289-STC",
+        "acct": "Pulte",
+        "waitMin": 539
+      },
+      {
+        "job": "Azario 6082 15265 Contenta Loop-26-0275-STC",
+        "acct": "Taylor Morrison",
+        "waitMin": 3252
+      },
+      {
+        "job": "Lilly Elaine Way Manatee County-26-0286-STC",
+        "acct": "Pulte",
+        "waitMin": 140
+      },
+      {
+        "job": "15225 Zaletti Street-26-0290-WTR",
+        "acct": "Taylor Morrison",
+        "waitMin": 356
+      },
+      {
+        "job": "8252 Summer Night Road-26-0297-MLD",
+        "acct": "Taylor Morrison",
+        "waitMin": 305
+      },
+      {
+        "job": "8228 Summer Night Road-26-0264-MLD",
+        "acct": "Taylor Morrison",
+        "waitMin": 1689
+      },
+      {
+        "job": "Park East - 16430 Paynes Mill // Create a plan t",
+        "acct": "Taylor Morrison",
+        "waitMin": 842
+      },
+      {
+        "job": "[EXT] Re: Warranty WO WAR, 00211002, 8070, Anthi",
+        "acct": "Neal Communities",
+        "waitMin": 684
+      },
+      {
+        "job": "Reagan Landing 09500 Truss/Wood Framing cleaning",
+        "acct": "Pulte",
+        "waitMin": 3317
+      },
+      {
+        "job": "Reagan Landing 01300 Rough lumber/truss cleaning",
+        "acct": "Pulte",
+        "waitMin": 3321
+      },
+      {
+        "job": "9298 Torrent Trl, Sarasota, FL 34241",
+        "acct": "Taylor Morrison",
+        "waitMin": 7032
+      },
+      {
+        "job": "[EXT] RE:  Warranty WO WAR, 00210615, 10133, Spr",
+        "acct": "Neal Communities",
+        "waitMin": 4539
+      },
+      {
+        "job": "[EXT] RE: WI 723 8027 Anthirium Loop-26-0232-WTR",
+        "acct": "Neal Communities",
+        "waitMin": 2800
+      },
+      {
+        "job": "09 ESP AZARIO GC 52 - 14302201, 006165_15838 SAN",
+        "acct": "Taylor Morrison",
+        "waitMin": 1620
+      }
+    ]
+  },
+  "note": "Business hours Mon-Fri 8-5 ET. Metric 1 = first reply to a new builder thread; Metric 2 = mid-thread turnaround. Threaded by conversationId. Native n8n read of rest@ + cons@."
+}
